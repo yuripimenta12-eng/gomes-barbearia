@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Gomes Barbearia — Agende seu horário | Salvador, BA</title>
+<meta name="description" content="Gomes Barbearia em Salvador (Sete de Abril). Cortes, barba, degradê, platinado e tratamentos com Jeferson. Agende em segundos e confirme pelo WhatsApp.">
+<meta name="theme-color" content="#090908">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+<meta property="og:type" content="business.business">
+<meta property="og:title" content="Gomes Barbearia — Agende seu horário">
+<meta property="og:description" content="Cortes, barba, degradê, platinado e tratamentos com Jeferson. Agende em segundos, confirme pelo WhatsApp.">
+<meta property="og:image" content="https://gomes-barbearia-one.vercel.app/icon-512.png">
+<meta property="og:locale" content="pt_BR">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HairSalon",
+  "name": "Gomes Barbearia",
+  "image": "https://gomes-barbearia-one.vercel.app/icon-512.png",
+  "telephone": "+5521996575573",
+  "priceRange": "R$8 - R$100",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "R. Nossa Sra. do Carmo, 721 - Sete de Abril",
+    "addressLocality": "Salvador",
+    "addressRegion": "BA",
+    "postalCode": "41385-040",
+    "addressCountry": "BR"
+  },
+  "openingHoursSpecification": [{
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+    "opens": "09:00",
+    "closes": "19:30"
+  }],
+  "makesOffer": [
+    {"@type":"Offer","itemOffered":{"@type":"Service","name":"Corte de Tesoura"}},
+    {"@type":"Offer","itemOffered":{"@type":"Service","name":"Barba"}},
+    {"@type":"Offer","itemOffered":{"@type":"Service","name":"Corte Degradê / Fade"}}
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============ RESET & TOKENS ============ */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --black:#090908;
+  --black-2:#0d0d0b;
+  --black-3:#131310;
+  --border:#2a2318;
+  --border-soft:#1c1811;
+  --gold:#E1BC86;
+  --gold-light:#F4D8AA;
+  --bronze:#CEA26B;
+  --red:#94241A;
+  --blue:#1B64B9;
+  --cream:#F7EFE3;
+  --muted:#9a8a76;
+  --danger:#c0392b;
+  --ok:#4caf50;
+  --radius:6px;
+  --maxw:560px;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Montserrat',sans-serif;
+  background:var(--black);
+  color:var(--cream);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important}
+}
+img,svg{display:block;max-width:100%}
+button{font-family:inherit}
+input,textarea,select{font-family:inherit}
+::selection{background:var(--gold);color:var(--black)}
+
+.disp{font-family:'Cinzel',serif;font-weight:900}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 18px}
+
+/* ornamental corner frame, echoes the brand book */
+.frame{position:relative}
+.frame::before,.frame::after,
+.frame .fc-tl,.frame .fc-tr,.frame .fc-bl,.frame .fc-br{content:'';position:absolute;width:22px;height:22px;border-color:var(--gold);opacity:.55}
+.frame::before{top:10px;left:10px;border-top:1.5px solid var(--gold);border-left:1.5px solid var(--gold);opacity:.55}
+.frame::after{bottom:10px;right:10px;border-bottom:1.5px solid var(--gold);border-right:1.5px solid var(--gold);opacity:.55}
+
+/* ============ STATUS BAR ============ */
+#statusBar{padding:7px 16px;text-align:center;font-size:10.5px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;transition:background .3s,color .3s}
+.sdot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px;vertical-align:middle}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.sdot{animation:pulse 1.6s ease-in-out infinite}
+
+/* ============ HEADER ============ */
+.hdr{background:var(--black-2);border-bottom:1px solid var(--border);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:60}
+.hdr-brand{display:flex;align-items:center;gap:10px}
+.hdr-mark{width:30px;height:30px;flex-shrink:0}
+.hdr-name{font-size:17px;letter-spacing:4px;color:var(--gold)}
+.hdr-tag{font-size:8px;color:var(--bronze);letter-spacing:2.5px;text-transform:uppercase;margin-top:2px}
+.hdr-map{background:none;border:1px solid var(--border);color:var(--gold);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.hdr-map:active{background:var(--gold);color:var(--black)}
+
+/* ============ HERO ============ */
+.hero{background:var(--black-2);padding:38px 24px 30px;text-align:center;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.hero::before,.hero::after{content:'';position:absolute;left:50%;transform:translateX(-50%);width:180px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.hero::before{top:0}.hero::after{bottom:0}
+.h-name{font-size:38px;letter-spacing:5px;color:var(--gold);line-height:1.1;margin-bottom:6px}
+.h-sub{font-family:'Cinzel',serif;font-size:12px;font-weight:600;color:var(--bronze);letter-spacing:3px;text-transform:uppercase;margin-bottom:14px}
+.h-line{width:50px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 16px}
+.h-slogan{font-size:12.5px;color:var(--muted);letter-spacing:.5px;line-height:1.7;max-width:320px;margin:0 auto 18px}
+.h-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(225,188,134,.08);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:11px;color:var(--gold-light);letter-spacing:.5px;margin-bottom:20px}
+.h-badge b{color:var(--gold);font-weight:700}
+.h-ctas{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.h-note{margin-top:14px;font-size:11px;color:var(--red);letter-spacing:.3px;display:none}
+.h-note.show{display:block}
+
+/* pole strip divider */
+.pole-strip{display:flex;height:5px}
+.pole-strip div{flex:1}
+
+/* ============ BUTTONS ============ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 22px;border:none;border-radius:var(--radius);font-family:'Cinzel',serif;font-size:11.5px;letter-spacing:1.8px;text-transform:uppercase;cursor:pointer;font-weight:700;transition:transform .15s,opacity .15s;-webkit-appearance:none;text-decoration:none}
+.btn-gold{background:linear-gradient(135deg,var(--bronze),var(--gold-light),var(--bronze));color:var(--black)}
+.btn-gold:active{transform:scale(.97);opacity:.9}
+.btn-outline{background:transparent;color:var(--gold);border:1.5px solid var(--border)}
+.btn-outline:active{background:rgba(225,188,134,.08)}
+.btn-block{width:100%;display:flex}
+.btn-sm{padding:9px 14px;font-size:10px;letter-spacing:1.2px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ============ BANNERS ============ */
+.banner{margin:14px 18px 0;background:var(--black-3);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:var(--radius);padding:12px 14px;display:flex;align-items:center;gap:12px;font-size:12px}
+.banner p{flex:1;color:var(--cream);line-height:1.5}
+.banner p b{color:var(--gold)}
+.banner-close{background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:2px 6px;flex-shrink:0}
+
+/* ============ TABS (scrollspy) ============ */
+.tabs{display:flex;background:var(--black-2);border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:57px;z-index:55;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;padding:13px 18px;text-align:center;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:6px;transition:color .2s,border-color .2s}
+.tab svg{width:14px;height:14px;stroke:currentColor;fill:none}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+/* ============ CATALOG ============ */
+.cat-section{padding:26px 18px 6px;scroll-margin-top:105px}
+.cat-title{font-size:19px;color:var(--gold);letter-spacing:2px;margin-bottom:3px}
+.cat-desc{font-size:11.5px;color:var(--muted);margin-bottom:16px}
+.cat-gline{width:34px;height:1px;background:var(--gold);opacity:.5;margin-bottom:16px}
+
+.svc-grid{display:grid;grid-template-columns:1fr;gap:12px;max-width:var(--maxw);margin:0 auto}
+.svc-card{background:var(--black-2);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color .2s;display:flex;min-height:118px}
+.svc-card:active{border-color:var(--gold)}
+.svc-photo{width:120px;flex-shrink:0;background:
+    repeating-linear-gradient(135deg,rgba(225,188,134,.06) 0 10px, transparent 10px 20px),
+    linear-gradient(160deg,#171208,#0b0a07);
+  display:flex;align-items:center;justify-content:center}
+.svc-photo svg{width:32px;height:32px;stroke:var(--gold);fill:none;opacity:.8}
+.svc-info{flex:1;padding:12px 14px;display:flex;flex-direction:column;justify-content:center;min-width:0;gap:5px}
+.svc-name{font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--cream);letter-spacing:.5px;text-transform:uppercase;line-height:1.25}
+.svc-desc{font-size:11px;color:var(--bronze);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.svc-dur{font-size:10.5px;color:var(--muted);display:inline-flex;align-items:center;gap:4px}
+.svc-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:2px}
+.svc-price{font-size:16px;color:var(--gold);font-weight:700;white-space:nowrap}
+.svc-book-btn{background:var(--red);color:var(--cream);border:none;border-radius:7px;padding:8px 16px;font-family:'Cinzel',serif;font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;flex-shrink:0;transition:transform .15s,opacity .15s}
+.svc-book-btn:active{transform:scale(.95);opacity:.85}
+
+/* ============ NUDGE BAR ============ */
+.nudge{position:fixed;left:0;right:0;bottom:70px;z-index:48;display:none}
+.nudge.show{display:flex}
+.nudge-inner{max-width:var(--maxw);margin:0 auto;background:var(--red);color:var(--cream);padding:9px 16px;font-size:11px;letter-spacing:.3px;display:flex;align-items:center;gap:8px;box-shadow:0 -2px 12px rgba(0,0,0,.4);cursor:pointer}
+.nudge-inner b{text-decoration:underline}
+
+/* ============ FLOATING CART ============ */
+.fab{position:fixed;left:0;right:0;bottom:0;z-index:50;padding:12px;display:none}
+.fab.show{display:block}
+.fab-inner{max-width:var(--maxw);margin:0 auto;background:linear-gradient(135deg,var(--bronze),var(--gold-light),var(--bronze));border-radius:var(--radius);padding:13px 18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;box-shadow:0 6px 22px rgba(0,0,0,.55)}
+.fab-left{display:flex;align-items:center;gap:10px}
+.fab-count{background:var(--black);color:var(--gold);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.fab-label{font-family:'Cinzel',serif;font-size:12px;letter-spacing:1.5px;color:var(--black);font-weight:700;text-transform:uppercase}
+.fab-total{font-size:15px;font-weight:700;color:var(--black)}
+
+/* ============ MODAL (service detail) ============ */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:80;display:none;align-items:flex-end;justify-content:center}
+.overlay.show{display:flex}
+@media (min-width:600px){.overlay{align-items:center}}
+.modal-panel{background:var(--black-2);width:100%;max-width:var(--maxw);border-radius:16px 16px 0 0;max-height:92vh;display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--border);border-bottom:none}
+@media (min-width:600px){.modal-panel{border-radius:12px;border-bottom:1px solid var(--border);max-height:88vh}}
+.modal-hero{height:150px;background:
+    repeating-linear-gradient(135deg,rgba(225,188,134,.06) 0 10px, transparent 10px 20px),
+    linear-gradient(160deg,#171208,#0b0a07);
+  display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;border-bottom:1px solid var(--border)}
+.modal-hero svg{width:52px;height:52px;stroke:var(--gold);fill:none;opacity:.8}
+.modal-close{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:rgba(9,9,8,.7);border:1px solid var(--border);color:var(--gold);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px}
+.modal-body{padding:18px 20px;overflow-y:auto;flex:1;min-height:0}
+.modal-name{font-size:19px;color:var(--gold-light);letter-spacing:.5px;margin-bottom:8px;font-weight:700}
+.modal-meta{display:flex;gap:10px;margin-bottom:12px}
+.modal-price{font-size:20px;color:var(--gold);font-weight:700}
+.modal-desc{font-size:12.5px;color:var(--muted);line-height:1.7;margin-bottom:18px}
+
+.field-label{font-size:9.5px;letter-spacing:1.6px;text-transform:uppercase;color:var(--bronze);margin-bottom:7px;display:block;font-weight:700}
+.field-input{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;color:var(--cream);background:var(--black);margin-bottom:16px;outline:none;transition:border-color .2s;-webkit-appearance:none}
+.field-input:focus{border-color:var(--gold)}
+.field-input::placeholder{color:#4a4234}
+textarea.field-input{resize:vertical;min-height:64px;line-height:1.5}
+
+.qty-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.qty-ctrl{display:flex;align-items:center;gap:14px}
+.qty-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--gold);background:transparent;color:var(--gold);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.qty-btn:active{background:var(--gold);color:var(--black)}
+.qty-val{font-size:17px;font-weight:700;min-width:20px;text-align:center}
+
+.chips-wrap{margin-bottom:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--border);color:var(--gold-light);background:var(--black);border-radius:20px;padding:8px 14px;font-size:11.5px;margin:0 8px 8px 0;cursor:pointer;transition:all .15s}
+.chip:active{transform:scale(.96)}
+.chip.added{border-color:var(--ok);color:var(--ok);opacity:.75;pointer-events:none}
+.chip .cprice{color:var(--muted);font-size:10px}
+
+.modal-foot{padding:14px 20px;border-top:1px solid var(--border);flex-shrink:0;background:var(--black-2)}
+
+/* ============ BOTTOM SHEET (cart / checkout) ============ */
+.sheet-panel{background:var(--black-2);width:100%;max-width:var(--maxw);border-radius:16px 16px 0 0;max-height:92vh;display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--border);border-bottom:none}
+@media (min-width:600px){.sheet-panel{border-radius:12px;border-bottom:1px solid var(--border);max-height:88vh}}
+.sh-header{padding:16px 20px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.sh-title{font-size:16px;color:var(--gold);letter-spacing:1.5px}
+.sh-close{width:32px;height:32px;border-radius:50%;background:var(--black);border:1px solid var(--border);color:var(--gold);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px}
+
+/* required scroll-fix layout */
+.sh-body{flex:0 1 auto;min-height:0;overflow-y:auto;max-height:34vh;padding:12px 20px;border-bottom:1px solid var(--border-soft)}
+.sh-foot{flex:1 1 auto;min-height:0;overflow-y:auto;padding:16px 20px 0;display:flex;flex-direction:column}
+
+.cart-empty{text-align:center;color:var(--muted);font-size:12.5px;padding:20px 0}
+.cart-line{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border-soft)}
+.cart-line:last-child{border-bottom:none}
+.cl-info{flex:1;min-width:0}
+.cl-name{font-size:12.5px;color:var(--cream);font-weight:600;margin-bottom:3px}
+.cl-sub{font-size:11px;color:var(--muted)}
+.cl-obs{font-size:10.5px;color:var(--bronze);font-style:italic;margin-top:3px}
+.cl-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
+.cl-price{font-size:12.5px;color:var(--gold);font-weight:700}
+.cl-qty{display:flex;align-items:center;gap:6px}
+.cl-qbtn{width:22px;height:22px;border-radius:50%;border:1px solid var(--border);background:var(--black);color:var(--gold);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.cl-remove{font-size:10px;color:var(--danger);cursor:pointer;text-decoration:underline;margin-top:2px}
+
+.section-label{font-size:9.5px;letter-spacing:1.8px;text-transform:uppercase;color:var(--bronze);margin:16px 0 9px;font-weight:700;display:flex;align-items:center;gap:8px}
+.section-label:first-child{margin-top:0}
+
+.date-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:4px;scrollbar-width:none}
+.date-scroll::-webkit-scrollbar{display:none}
+.date-chip{flex-shrink:0;min-width:56px;text-align:center;padding:9px 6px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;background:var(--black)}
+.date-chip .dwd{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.date-chip .dnum{font-size:15px;color:var(--cream);font-weight:700;margin:2px 0}
+.date-chip .dmo{font-size:8.5px;color:var(--muted);text-transform:uppercase}
+.date-chip.sel{background:var(--gold);border-color:var(--gold)}
+.date-chip.sel *{color:var(--black) !important}
+.date-chip.today .dwd{color:var(--gold)}
+
+.slot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:4px}
+.slot{padding:10px 4px;text-align:center;border:1px solid var(--border);border-radius:6px;font-size:12.5px;cursor:pointer;background:var(--black);color:var(--cream)}
+.slot.sel{background:var(--gold);color:var(--black);border-color:var(--gold);font-weight:700}
+.slot.dis{background:var(--black-3);color:#403824;cursor:not-allowed;text-decoration:line-through}
+.slot-hint{font-size:10.5px;color:var(--muted);margin-bottom:10px;font-style:italic}
+
+.pay-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pay-opt{padding:11px 4px;text-align:center;border:1.5px solid var(--border);border-radius:6px;font-size:11px;cursor:pointer;color:var(--cream);background:var(--black)}
+.pay-opt.sel{border-color:var(--gold);color:var(--gold);background:rgba(225,188,134,.08)}
+
+.coupon-row{display:flex;gap:8px}
+.coupon-row .field-input{margin-bottom:0}
+.coupon-msg{font-size:11px;margin-top:6px;min-height:14px}
+.coupon-msg.ok{color:var(--ok)}
+.coupon-msg.err{color:var(--danger)}
+
+.summary{background:var(--black);border:1.5px solid var(--border);border-radius:8px;padding:14px 16px;margin:16px 0}
+.sum-row{display:flex;justify-content:space-between;padding:6px 0;font-size:12.5px}
+.sum-row:not(:last-child){border-bottom:1px solid var(--border-soft)}
+.sum-lbl{color:var(--muted)}
+.sum-val{color:var(--cream);font-weight:600}
+.sum-row.total .sum-lbl,.sum-row.total .sum-val{color:var(--gold);font-size:16px;font-weight:700}
+.sum-row.disc .sum-val{color:var(--ok)}
+
+.submit-wrap{position:sticky;bottom:0;background:var(--black-2);padding:14px 0 18px;margin-top:6px}
+
+/* ============ ABOUT / FOOTER ============ */
+.about{padding:34px 24px;text-align:center;border-top:1px solid var(--border);background:var(--black-2)}
+.about-title{font-size:17px;color:var(--gold);letter-spacing:2px;margin-bottom:12px}
+.about p{font-size:12.5px;color:var(--muted);line-height:1.9;max-width:400px;margin:0 auto}
+
+.footer{background:var(--black);border-top:1px solid var(--border);padding:30px 24px 22px;text-align:center}
+.footer-name{font-size:17px;color:var(--gold);letter-spacing:3px;margin-bottom:10px}
+.footer-line{font-size:11.5px;color:var(--muted);line-height:1.9}
+.footer-line b{color:var(--gold-light);font-weight:600}
+.footer-admin{margin-top:22px;font-size:9px;color:#332c20;letter-spacing:1px;cursor:pointer;user-select:none}
+
+/* ============ TOAST ============ */
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--gold);color:var(--black);padding:10px 20px;border-radius:24px;font-size:12px;font-weight:700;letter-spacing:.3px;z-index:120;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;box-shadow:0 6px 18px rgba(0,0,0,.4)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ============ ADMIN ============ */
+.admin-note{font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:14px;background:var(--black);border:1px solid var(--border);border-radius:6px;padding:10px 12px}
+.admin-status-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.closed-date-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:12px;border-bottom:1px solid var(--border-soft)}
+.closed-date-item span{color:var(--cream)}
+.closed-date-item a{color:var(--danger);cursor:pointer;font-size:11px;text-decoration:underline}
+
+@media (min-width:600px){
+  .h-name{font-size:46px}
+}
+</style>
+</head>
+<body>
+
+<div id="statusBar"><span class="sdot" id="sdot"></span><span id="stxt">Carregando...</span></div>
+
+<header class="hdr">
+  <div class="hdr-brand">
+    <svg class="hdr-mark" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="none" stroke="#E1BC86" stroke-width="4"/><rect x="38" y="26" width="24" height="48" rx="12" fill="#F7EFE3"/><rect x="38" y="34" width="24" height="8" fill="#94241A"/><rect x="38" y="58" width="24" height="8" fill="#1B64B9"/><circle cx="50" cy="24" r="9" fill="#E1BC86"/><circle cx="50" cy="76" r="9" fill="#E1BC86"/></svg>
+    <div>
+      <div class="hdr-name disp">GOMES</div>
+      <div class="hdr-tag">Barbearia</div>
+    </div>
+  </div>
+  <button class="hdr-map" onclick="openMaps()" aria-label="Como chegar">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+  </button>
+</header>
+
+<section class="hero frame">
+  <div class="h-name disp">GOMES BARBEARIA</div>
+  <div class="h-sub">Sete de Abril &middot; Salvador</div>
+  <div class="h-line"></div>
+  <p class="h-slogan">Tradição que se vê. Confiança que se sente.<br>Corte, barba e cuidado masculino de verdade.</p>
+  <div class="h-badge">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E1BC86" stroke-width="2"><path d="M20 21a8 8 0 1 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
+    Atendido por <b>Jeferson</b>
+  </div>
+  <div class="h-ctas">
+    <button class="btn btn-gold" onclick="scrollToCat('cortes')">Ver Serviços</button>
+    <button class="btn btn-outline" onclick="openMaps()">Como Chegar</button>
+  </div>
+  <div class="h-note" id="closedNote">Estamos fechados agora, mas você já pode deixar seu horário agendado.</div>
+</section>
+<div class="pole-strip"><div style="background:#94241A"></div><div style="background:#F7EFE3"></div><div style="background:#1B64B9"></div><div style="background:#F7EFE3"></div><div style="background:#94241A"></div></div>
+
+<div id="repeatBanner" class="banner" style="display:none">
+  <p>Repetir seu último agendamento? <b id="repeatSummary"></b></p>
+  <button class="btn btn-sm btn-outline" onclick="repeatLast()">Repetir</button>
+</div>
+
+<div id="installBanner" class="banner" style="display:none">
+  <p>📲 <b>Instale a Gomes Barbearia</b> no seu celular para agendar mais rápido.</p>
+  <button class="btn btn-sm btn-gold" onclick="doInstall()">Instalar</button>
+  <button class="banner-close" onclick="dismissInstall()">&times;</button>
+</div>
+
+<nav class="tabs" id="tabs">
+  <div class="tab active" data-cat="cortes" onclick="scrollToCat('cortes')">
+    <svg viewBox="0 0 24 24" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12"/></svg>
+    Cortes
+  </div>
+  <div class="tab" data-cat="tratamentos" onclick="scrollToCat('tratamentos')">
+    <svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 2s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11Z"/></svg>
+    Tratamentos
+  </div>
+  <div class="tab" data-cat="combos" onclick="scrollToCat('combos')">
+    <svg viewBox="0 0 24 24" stroke-width="2"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg>
+    Combos
+  </div>
+  <div class="tab" data-cat="acabamentos" onclick="scrollToCat('acabamentos')">
+    <svg viewBox="0 0 24 24" stroke-width="2"><path d="M6 3v18M18 3v18M3 8h6M3 16h6M15 8h6M15 16h6"/></svg>
+    Acabamentos
+  </div>
+</nav>
+
+<main id="catalog"></main>
+
+<section class="about frame">
+  <div class="about-title disp">SOBRE A GOMES</div>
+  <p>Uma barbearia pensada para quem valoriza tradição e precisão. Jeferson atende com hora marcada, sem pressa, cuidando de cada detalhe do corte à barba — para você sair de cadeira com a confiança no lugar certo.</p>
+</section>
+
+<footer class="footer">
+  <div class="footer-name disp">GOMES BARBEARIA</div>
+  <div class="footer-line">
+    <b>Endereço:</b> R. Nossa Sra. do Carmo, 721 - Sete de Abril, Salvador - BA, 41385-040<br>
+    <b>Horário:</b> Todos os dias, 09h às 19h30 (pausa para almoço)<br>
+    <b>WhatsApp:</b> (21) 99657-5573
+  </div>
+  <div style="margin-top:16px"><button class="btn btn-sm btn-outline" onclick="openMaps()">Como Chegar</button></div>
+  <div class="footer-admin" onclick="openAdmin()">⚙ config</div>
+</footer>
+
+<!-- NUDGE -->
+<div class="nudge" id="nudge">
+  <div class="nudge-inner" onclick="openSheet()">
+    <span>💈 Aproveite e agende também <b id="nudgeText">barba na mesma cadeira</b>, sem esperar de novo.</span>
+  </div>
+</div>
+
+<!-- FLOATING CART -->
+<div class="fab" id="fab">
+  <div class="fab-inner" onclick="openSheet()">
+    <div class="fab-left">
+      <span class="fab-count" id="fabCount">0</span>
+      <span class="fab-label">Meu Agendamento</span>
+    </div>
+    <span class="fab-total" id="fabTotal">R$ 0,00</span>
+  </div>
+</div>
+
+<!-- SERVICE MODAL -->
+<div class="overlay" id="modalOverlay">
+  <div class="modal-panel">
+    <div class="modal-hero">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <svg id="modalIcon" viewBox="0 0 24 24" stroke-width="1.5"></svg>
+    </div>
+    <div class="modal-body">
+      <div class="modal-name" id="modalName"></div>
+      <div class="modal-meta">
+        <span class="modal-price" id="modalPrice"></span>
+        <span class="svc-dur" id="modalDur"></span>
+      </div>
+      <p class="modal-desc" id="modalDesc"></p>
+
+      <label class="field-label">Observação (opcional)</label>
+      <textarea class="field-input" id="modalObs" placeholder="Ex: degradê na régua, barba curta, disfarçado..."></textarea>
+
+      <div class="qty-row">
+        <label class="field-label" style="margin:0">Quantidade</label>
+        <div class="qty-ctrl">
+          <button class="qty-btn" onclick="modalQty(-1)">&minus;</button>
+          <span class="qty-val" id="modalQty">1</span>
+          <button class="qty-btn" onclick="modalQty(1)">+</button>
+        </div>
+      </div>
+
+      <div id="chipsSection">
+        <label class="field-label">Adicione também</label>
+        <div class="chips-wrap" id="modalChips"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-gold btn-block" id="modalAddBtn" onclick="addModalToCart()">Adicionar ao agendamento</button>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM SHEET -->
+<div class="overlay" id="sheetOverlay">
+  <div class="sheet-panel">
+    <div class="sh-header">
+      <div class="sh-title disp">Meu Agendamento</div>
+      <button class="sh-close" onclick="closeSheet()">&times;</button>
+    </div>
+
+    <div class="sh-body" id="cartItems"></div>
+
+    <div class="sh-foot" id="sheetFoot">
+      <div id="completeSection" style="display:none">
+        <div class="section-label">Complete seu visual</div>
+        <div class="chips-wrap" id="completeChips"></div>
+      </div>
+
+      <div class="section-label">Escolha a data</div>
+      <div class="date-scroll" id="dateScroll"></div>
+
+      <div id="slotsSection" style="display:none">
+        <div class="section-label" style="margin-top:18px">Escolha o horário</div>
+        <div class="slot-hint" id="slotHint"></div>
+        <div class="slot-grid" id="slotGrid"></div>
+      </div>
+
+      <div class="section-label">Seus dados</div>
+      <label class="field-label">Nome completo</label>
+      <input class="field-input" id="clientName" type="text" placeholder="Seu nome" autocomplete="name">
+      <label class="field-label">WhatsApp</label>
+      <input class="field-input" id="clientPhone" type="tel" placeholder="(71) 99999-9999" autocomplete="tel">
+
+      <div class="section-label">Pagamento no local</div>
+      <div class="pay-grid" id="payGrid">
+        <div class="pay-opt sel" data-p="PIX">PIX</div>
+        <div class="pay-opt" data-p="Dinheiro">Dinheiro</div>
+        <div class="pay-opt" data-p="Cartão">Cartão</div>
+      </div>
+
+      <div class="section-label">Cupom de desconto</div>
+      <div class="coupon-row">
+        <input class="field-input" id="couponInput" type="text" placeholder="Código do cupom" style="text-transform:uppercase">
+        <button class="btn btn-outline btn-sm" onclick="applyCoupon()">Aplicar</button>
+      </div>
+      <div class="coupon-msg" id="couponMsg"></div>
+
+      <div class="summary" id="summaryBox"></div>
+
+      <div class="submit-wrap">
+        <button class="btn btn-gold btn-block" id="submitBtn" onclick="submitBooking()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.4 0-.5C10 9 9.4 7.6 9.1 7c-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2.1 3.2 5 4.4.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3ZM12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2Z"/></svg>
+          Confirmar no WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div class="overlay" id="adminOverlay">
+  <div class="sheet-panel">
+    <div class="sh-header">
+      <div class="sh-title disp">Configurações</div>
+      <button class="sh-close" onclick="closeAdmin()">&times;</button>
+    </div>
+    <div class="sh-foot" style="padding:16px 20px">
+      <div class="admin-note">Visível só pra você (fica salvo neste navegador). Aqui você ajusta o horário de almoço, força aberto/fechado e bloqueia datas específicas.</div>
+
+      <div class="section-label" style="margin-top:0">Horário de almoço (1h)</div>
+      <label class="field-label">Início da pausa</label>
+      <input class="field-input" id="admLunchStart" type="time" value="12:30">
+
+      <div class="section-label">Status da loja</div>
+      <div class="admin-status-grid" id="admStatusGrid">
+        <div class="pay-opt sel" data-s="auto">Automático</div>
+        <div class="pay-opt" data-s="open">Forçar Aberto</div>
+        <div class="pay-opt" data-s="closed">Forçar Fechado</div>
+      </div>
+
+      <div class="section-label">Bloquear uma data</div>
+      <div style="display:flex;gap:8px">
+        <input class="field-input" id="admBlockDate" type="date">
+        <button class="btn btn-outline btn-sm" onclick="addClosedDate()">Bloquear</button>
+      </div>
+      <div id="closedDatesList"></div>
+
+      <div class="submit-wrap">
+        <button class="btn btn-gold btn-block" onclick="saveAdmin()">Salvar Configurações</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ============================================================
+   DADOS DA MARCA
+   ============================================================ */
+const BRAND = {
+  name: 'Gomes Barbearia',
+  phone: '5521996575573',
+  phoneDisplay: '(21) 99657-5573',
+  address: 'R. Nossa Sra. do Carmo, 721 - Sete de Abril, Salvador - BA, 41385-040',
+  mapsCoords: '-12.91173506225075,-38.42943307021991',
+  barber: 'Jeferson'
+};
+
+const ICONS = {
+  cortes: '<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12"/>',
+  tratamentos: '<path d="M12 2s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11Z"/>',
+  combos: '<path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/>',
+  acabamentos: '<path d="M6 3v18M18 3v18M3 8h6M3 16h6M15 8h6M15 16h6"/>'
+};
+
+/* ============================================================
+   CATÁLOGO DE SERVIÇOS
+   ============================================================ */
+const SERVICES = [
+  {id:'c1', cat:'cortes', name:'Corte de Pente Único', price:19, min:30, desc:'Corte à máquina com pente único, acabamento limpo e uniforme em toda a cabeça.'},
+  {id:'c2', cat:'cortes', name:'Corte Disfarçado', price:23, min:30, desc:'Transição suave entre as laterais e o topo, sem marcação abrupta.'},
+  {id:'c3', cat:'cortes', name:'Corte Navalhado', price:27, min:30, desc:'Acabamento fino na navalha para linhas e contornos precisos.'},
+  {id:'c4', cat:'cortes', name:'Corte Degradê / Fade', price:25, min:40, desc:'Degradê progressivo nas laterais, do baixo ao alto conforme seu estilo.'},
+  {id:'c5', cat:'cortes', name:'Corte de Tesoura', price:35, min:40, desc:'Corte 100% na tesoura, preservando textura e movimento natural do cabelo.'},
+
+  {id:'t1', cat:'tratamentos', name:'Pigmentação', price:19, min:30, desc:'Disfarça falhas e uniformiza a cor de cabelo e barba.'},
+  {id:'t2', cat:'tratamentos', name:'Luzes', price:55, min:60, desc:'Mechas para iluminar o visual com efeito natural.'},
+  {id:'t3', cat:'tratamentos', name:'Platinado', price:100, min:90, desc:'Descoloração completa com tonalização para um visual platinado uniforme.'},
+  {id:'t4', cat:'tratamentos', name:'Limpeza de Pele Simples', price:25, min:30, desc:'Limpeza facial pós-corte para deixar a pele saudável e renovada.'},
+
+  {id:'cb1', cat:'combos', name:'Corte Disfarçado + Tesoura', price:29, min:40},
+  {id:'cb2', cat:'combos', name:'Corte Disfarçado + Barba', price:40, min:50},
+  {id:'cb3', cat:'combos', name:'Corte Navalhado + Barba', price:44, min:50},
+  {id:'cb4', cat:'combos', name:'Corte de Pente Único + Barba', price:36, min:50},
+  {id:'cb5', cat:'combos', name:'Corte Disfarçado + Sobrancelha', price:33, min:45},
+  {id:'cb6', cat:'combos', name:'Corte Degradê/Fade + Barba', price:42, min:60},
+  {id:'cb7', cat:'combos', name:'Corte Degradê/Fade + Sobrancelha', price:35, min:55},
+  {id:'cb8', cat:'combos', name:'Corte Navalhado + Sobrancelha', price:37, min:45},
+  {id:'cb9', cat:'combos', name:'Pé de Cabelo + Barba', price:25, min:35},
+  {id:'cb10', cat:'combos', name:'Pé de Cabelo + Sobrancelha', price:20, min:30},
+  {id:'cb11', cat:'combos', name:'Corte Disfarçado + Tesoura + Sobrancelha', price:39, min:55},
+  {id:'cb12', cat:'combos', name:'Corte de Tesoura + Sobrancelha e Barba', price:62, min:75},
+  {id:'cb13', cat:'combos', name:'Navalhado + Barba + Sobrancelha', price:54, min:65},
+  {id:'cb14', cat:'combos', name:'Corte Disfarçado + Barba + Sobrancelha', price:50, min:65},
+  {id:'cb15', cat:'combos', name:'Corte Degradê/Fade + Barba + Sobrancelha', price:52, min:75},
+  {id:'cb16', cat:'combos', name:'Navalhado + Barba + Sobrancelha + Pigmentação', price:70, min:95},
+
+  {id:'a1', cat:'acabamentos', name:'Barba', price:17, min:20},
+  {id:'a2', cat:'acabamentos', name:'Sobrancelha', price:10, min:15},
+  {id:'a3', cat:'acabamentos', name:'Pé de Cabelo', price:10, min:15},
+  {id:'a4', cat:'acabamentos', name:'Serviços Extra', price:8, min:15, desc:'Ajustes e retoques diversos.'}
+];
+
+const CATS = [
+  {id:'cortes', label:'Cortes', desc:'Do clássico ao moderno, na tesoura ou na máquina.', style:'card'},
+  {id:'tratamentos', label:'Tratamentos', desc:'Cuidados extras para elevar o resultado.', style:'card'},
+  {id:'combos', label:'Combos', desc:'Corte, barba e sobrancelha juntos, com tudo combinado.', style:'row'},
+  {id:'acabamentos', label:'Acabamentos Rápidos', desc:'Retoques pontuais para fechar o visual.', style:'row'}
+];
+
+const COMPLEMENT_IDS = {barba:'a1', sobrancelha:'a2', 'pé de cabelo':'a3'};
+const MONTHS = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+const WDAYS = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+
+/* ============================================================
+   ESTADO
+   ============================================================ */
+let cart = []; // {uid, svcId, qty, obs}
+let selDate = null, selSlot = null;
+let coupon = null, couponPct = 0;
+let payment = 'PIX';
+let modalSvc = null, modalQtyVal = 1;
+let deferredPrompt = null;
+
+function findSvc(id){ return SERVICES.find(s => s.id === id); }
+function formatBRL(n){ return 'R$ ' + n.toFixed(2).replace('.', ','); }
+function toMin(t){ const [h,m] = t.split(':').map(Number); return h*60+m; }
+function toTime(m){ return String(Math.floor(m/60)).padStart(2,'0') + ':' + String(m%60).padStart(2,'0'); }
+function fmtDuration(min){
+  const h = Math.floor(min/60), m = min%60;
+  if (h === 0) return m + 'min';
+  if (m === 0) return h + 'h';
+  return h + 'h' + String(m).padStart(2,'0');
+}
+function esc(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+/* ============================================================
+   ADMIN CONFIG (localStorage)
+   ============================================================ */
+function getAdminConfig(){
+  const def = { lunchStart:'12:30', lunchDur:60, forceStatus:'auto', closedDates:[] };
+  try { return Object.assign(def, JSON.parse(localStorage.getItem('gomesAdmin') || '{}')); }
+  catch(e){ return def; }
+}
+function setAdminConfig(cfg){ localStorage.setItem('gomesAdmin', JSON.stringify(cfg)); }
+
+/* ============================================================
+   STATUS ABERTO/FECHADO
+   ============================================================ */
+function isOpenNow(){
+  const cfg = getAdminConfig();
+  if (cfg.forceStatus === 'open') return true;
+  if (cfg.forceStatus === 'closed') return false;
+  const now = new Date();
+  const mins = now.getHours()*60 + now.getMinutes();
+  const ls = toMin(cfg.lunchStart), le = ls + cfg.lunchDur;
+  if (mins < 9*60 || mins >= 19*60+30) return false;
+  if (mins >= ls && mins < le) return false;
+  return true;
+}
+function updateStatus(){
+  const open = isOpenNow();
+  const bar = document.getElementById('statusBar');
+  const dot = document.getElementById('sdot');
+  const txt = document.getElementById('stxt');
+  if (open){
+    bar.style.background = 'rgba(76,175,80,.08)';
+    bar.style.color = '#4caf50';
+    dot.style.background = '#4caf50';
+    txt.textContent = 'Aberto agora — agende seu horário';
+    document.getElementById('closedNote').classList.remove('show');
+  } else {
+    bar.style.background = 'rgba(192,57,43,.08)';
+    bar.style.color = '#e07a6d';
+    dot.style.background = '#c0392b';
+    txt.textContent = 'Fechado no momento';
+    document.getElementById('closedNote').classList.add('show');
+  }
+}
+
+/* ============================================================
+   RENDER CATÁLOGO
+   ============================================================ */
+function svcPhotoIcon(cat){
+  return '<svg viewBox="0 0 24 24" stroke-width="1.7">' + ICONS[cat] + '</svg>';
+}
+function renderCatalog(){
+  const main = document.getElementById('catalog');
+  main.innerHTML = CATS.map(cat => {
+    const items = SERVICES.filter(s => s.cat === cat.id);
+    const cardsHtml = items.map(s => {
+      return '<div class="svc-card" onclick="openModal(\'' + s.id + '\')">' +
+        '<div class="svc-photo">' + svcPhotoIcon(cat.id) + '</div>' +
+        '<div class="svc-info">' +
+          '<div class="svc-name">' + esc(s.name) + '</div>' +
+          (s.desc ? '<div class="svc-desc">' + esc(s.desc) + '</div>' : '') +
+          '<span class="svc-dur">🕐 ' + s.min + 'min</span>' +
+          '<div class="svc-bottom">' +
+            '<span class="svc-price">' + formatBRL(s.price) + '</span>' +
+            '<button class="svc-book-btn" onclick="event.stopPropagation(); openModal(\'' + s.id + '\')">Agendar</button>' +
+          '</div>' +
+        '</div></div>';
+    }).join('');
+    return '<section class="cat-section" id="cat-' + cat.id + '">' +
+      '<div class="cat-title disp">' + cat.label.toUpperCase() + '</div>' +
+      '<div class="cat-desc">' + cat.desc + '</div>' +
+      '<div class="cat-gline"></div>' +
+      '<div class="svc-grid">' + cardsHtml + '</div></section>';
+  }).join('');
+}
+
+function scrollToCat(catId){
+  document.getElementById('cat-' + catId).scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function setupScrollspy(){
+  const sections = CATS.map(c => document.getElementById('cat-' + c.id));
+  const tabs = document.querySelectorAll('.tab');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting){
+        const id = entry.target.id.replace('cat-', '');
+        tabs.forEach(t => t.classList.toggle('active', t.dataset.cat === id));
+      }
+    });
+  }, { rootMargin: '-110px 0px -70% 0px', threshold: 0 });
+  sections.forEach(s => obs.observe(s));
+}
+
+/* ============================================================
+   MODAL DE SERVIÇO
+   ============================================================ */
+function openModal(id){
+  modalSvc = findSvc(id);
+  modalQtyVal = 1;
+  document.getElementById('modalIcon').innerHTML = ICONS[modalSvc.cat];
+  document.getElementById('modalName').textContent = modalSvc.name;
+  document.getElementById('modalPrice').textContent = formatBRL(modalSvc.price);
+  document.getElementById('modalDur').textContent = '🕐 ' + modalSvc.min + 'min';
+  document.getElementById('modalDesc').textContent = modalSvc.desc || 'Serviço realizado por Jeferson, com todo o cuidado e acabamento Gomes Barbearia.';
+  document.getElementById('modalObs').value = '';
+  document.getElementById('modalQty').textContent = '1';
+  renderModalChips();
+  document.getElementById('modalOverlay').classList.add('show');
+}
+function closeModal(){ document.getElementById('modalOverlay').classList.remove('show'); modalSvc = null; }
+function modalQty(delta){
+  modalQtyVal = Math.max(1, Math.min(9, modalQtyVal + delta));
+  document.getElementById('modalQty').textContent = modalQtyVal;
+}
+function renderModalChips(){
+  const wrap = document.getElementById('modalChips');
+  const nameLower = modalSvc.name.toLowerCase();
+  const complements = Object.keys(COMPLEMENT_IDS).filter(k => !nameLower.includes(k) && COMPLEMENT_IDS[k] !== modalSvc.id);
+  if (!complements.length){ document.getElementById('chipsSection').style.display = 'none'; return; }
+  document.getElementById('chipsSection').style.display = 'block';
+  wrap.innerHTML = complements.map(k => {
+    const svc = findSvc(COMPLEMENT_IDS[k]);
+    return '<span class="chip" data-id="' + svc.id + '" onclick="quickAddChip(this, \'' + svc.id + '\')">+ ' + svc.name + ' <span class="cprice">' + formatBRL(svc.price) + '</span></span>';
+  }).join('');
+}
+function quickAddChip(el, svcId){
+  addToCart(svcId, 1, '');
+  el.classList.add('added');
+  el.innerHTML = '✓ Adicionado';
+  showToast('Adicionado ao seu agendamento');
+}
+function addModalToCart(){
+  const obs = document.getElementById('modalObs').value.trim();
+  addToCart(modalSvc.id, modalQtyVal, obs);
+  showToast(modalSvc.name + ' adicionado!');
+  closeModal();
+  openSheet();
+}
+
+/* ============================================================
+   CARRINHO
+   ============================================================ */
+function addToCart(svcId, qty, obs){
+  cart.push({ uid: Date.now() + Math.random().toString(16).slice(2), svcId, qty, obs });
+  renderCartUI();
+}
+function removeFromCart(uid){
+  cart = cart.filter(l => l.uid !== uid);
+  renderCartUI();
+}
+function changeQty(uid, delta){
+  const line = cart.find(l => l.uid === uid);
+  if (!line) return;
+  line.qty = Math.max(1, Math.min(9, line.qty + delta));
+  renderCartUI();
+}
+function cartTotals(){
+  let subtotal = 0, totalMin = 0;
+  cart.forEach(l => { const s = findSvc(l.svcId); subtotal += s.price * l.qty; totalMin += s.min * l.qty; });
+  const discount = couponPct ? subtotal * couponPct : 0;
+  const total = subtotal - discount;
+  return { subtotal, totalMin, discount, total, count: cart.reduce((a,l)=>a+l.qty,0) };
+}
+function cartHasWord(word){
+  return cart.some(l => findSvc(l.svcId).name.toLowerCase().includes(word));
+}
+
+function renderCartUI(){
+  const t = cartTotals();
+  // FAB
+  const fab = document.getElementById('fab');
+  fab.classList.toggle('show', cart.length > 0);
+  document.getElementById('fabCount').textContent = t.count;
+  document.getElementById('fabTotal').textContent = formatBRL(t.total);
+
+  // Nudge
+  const missing = [];
+  if (!cartHasWord('barba')) missing.push('barba');
+  if (!cartHasWord('sobrancelha')) missing.push('sobrancelha');
+  const nudge = document.getElementById('nudge');
+  if (cart.length > 0 && missing.length){
+    nudge.classList.add('show');
+    document.getElementById('nudgeText').textContent = missing.join(' e ') + ' na mesma cadeira';
+  } else {
+    nudge.classList.remove('show');
+  }
+
+  // Cart list in sheet
+  const wrap = document.getElementById('cartItems');
+  if (!cart.length){
+    wrap.innerHTML = '<div class="cart-empty">Seu agendamento está vazio.<br>Escolha um serviço no catálogo.</div>';
+  } else {
+    wrap.innerHTML = cart.map(l => {
+      const s = findSvc(l.svcId);
+      return '<div class="cart-line">' +
+        '<div class="cl-info"><div class="cl-name">' + esc(s.name) + '</div>' +
+        '<div class="cl-sub">' + formatBRL(s.price) + ' &middot; ' + s.min + 'min' + (l.obs ? '' : '') + '</div>' +
+        (l.obs ? '<div class="cl-obs">"' + esc(l.obs) + '"</div>' : '') +
+        '</div>' +
+        '<div class="cl-right"><div class="cl-price">' + formatBRL(s.price * l.qty) + '</div>' +
+        '<div class="cl-qty"><button class="cl-qbtn" onclick="changeQty(\'' + l.uid + '\',-1)">&minus;</button>' +
+        '<span>' + l.qty + '</span><button class="cl-qbtn" onclick="changeQty(\'' + l.uid + '\',1)">+</button></div>' +
+        '<span class="cl-remove" onclick="removeFromCart(\'' + l.uid + '\')">remover</span></div>' +
+        '</div>';
+    }).join('');
+  }
+
+  // Complete seu visual
+  const compSec = document.getElementById('completeSection');
+  const compWrap = document.getElementById('completeChips');
+  const missingSvcs = Object.keys(COMPLEMENT_IDS).filter(k => cart.length && !cartHasWord(k));
+  if (missingSvcs.length){
+    compSec.style.display = 'block';
+    compWrap.innerHTML = missingSvcs.map(k => {
+      const svc = findSvc(COMPLEMENT_IDS[k]);
+      return '<span class="chip" onclick="addToCart(\'' + svc.id + '\',1,\'\'); showToast(\'' + svc.name + ' adicionado!\'); this.classList.add(\'added\'); this.innerHTML=\'✓ Adicionado\'">+ ' + svc.name + ' <span class="cprice">' + formatBRL(svc.price) + '</span></span>';
+    }).join('');
+  } else {
+    compSec.style.display = 'none';
+  }
+
+  renderSlotsIfNeeded();
+  renderSummary();
+}
+
+function renderSummary(){
+  const t = cartTotals();
+  const box = document.getElementById('summaryBox');
+  let html = '';
+  html += '<div class="sum-row"><span class="sum-lbl">Serviços</span><span class="sum-val">' + t.count + '</span></div>';
+  html += '<div class="sum-row"><span class="sum-lbl">Duração estimada</span><span class="sum-val">' + (t.totalMin ? fmtDuration(t.totalMin) : '—') + '</span></div>';
+  html += '<div class="sum-row"><span class="sum-lbl">Subtotal</span><span class="sum-val">' + formatBRL(t.subtotal) + '</span></div>';
+  if (t.discount > 0) html += '<div class="sum-row disc"><span class="sum-lbl">Desconto (' + coupon + ')</span><span class="sum-val">&minus; ' + formatBRL(t.discount) + '</span></div>';
+  html += '<div class="sum-row total"><span class="sum-lbl">Total estimado</span><span class="sum-val">' + formatBRL(t.total) + '</span></div>';
+  box.innerHTML = html;
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = !(cart.length && selDate && selSlot);
+}
+
+/* ============================================================
+   CUPOM
+   ============================================================ */
+function applyCoupon(){
+  const val = document.getElementById('couponInput').value.trim().toUpperCase();
+  const msg = document.getElementById('couponMsg');
+  if (val === 'GOME25'){
+    coupon = val; couponPct = 0.05;
+    msg.textContent = 'Cupom aplicado! 5% de desconto.';
+    msg.className = 'coupon-msg ok';
+  } else {
+    coupon = null; couponPct = 0;
+    msg.textContent = val ? 'Cupom inválido.' : '';
+    msg.className = 'coupon-msg err';
+  }
+  renderSummary();
+}
+
+/* ============================================================
+   PAGAMENTO
+   ============================================================ */
+document.getElementById('payGrid').addEventListener('click', (e) => {
+  const opt = e.target.closest('.pay-opt');
+  if (!opt) return;
+  document.querySelectorAll('#payGrid .pay-opt').forEach(o => o.classList.remove('sel'));
+  opt.classList.add('sel');
+  payment = opt.dataset.p;
+});
+
+/* ============================================================
+   DATA E HORÁRIO
+   ============================================================ */
+function renderDates(){
+  const cfg = getAdminConfig();
+  const wrap = document.getElementById('dateScroll');
+  const today = new Date(); today.setHours(0,0,0,0);
+  let html = '';
+  let count = 0, offset = 0;
+  while (count < 14 && offset < 60){
+    const d = new Date(today); d.setDate(d.getDate() + offset);
+    const ds = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    offset++;
+    if (cfg.closedDates.includes(ds)) continue;
+    const isToday = offset === 1;
+    html += '<div class="date-chip' + (selDate===ds?' sel':'') + (isToday?' today':'') + '" onclick="selectDate(\'' + ds + '\')">' +
+      '<div class="dwd">' + (isToday ? 'Hoje' : WDAYS[d.getDay()]) + '</div>' +
+      '<div class="dnum">' + d.getDate() + '</div>' +
+      '<div class="dmo">' + MONTHS[d.getMonth()] + '</div></div>';
+    count++;
+  }
+  wrap.innerHTML = html;
+}
+function selectDate(ds){
+  selDate = ds; selSlot = null;
+  document.getElementById('slotsSection').style.display = 'block';
+  renderDates();
+  renderSlots();
+  renderSummary();
+}
+function renderSlotsIfNeeded(){
+  if (selDate) renderSlots();
+}
+function renderSlots(){
+  const cfg = getAdminConfig();
+  const t = cartTotals();
+  const dur = t.totalMin || 30;
+  const [y,m,d] = selDate.split('-').map(Number);
+  const dateObj = new Date(y, m-1, d);
+  const isToday = dateObj.toDateString() === new Date().toDateString();
+  const nowMin = new Date().getHours()*60 + new Date().getMinutes();
+
+  const ls = toMin(cfg.lunchStart), le = ls + cfg.lunchDur;
+  const openM = 9*60, closeM = 19*60+30;
+
+  let bookedSet = [];
+  try {
+    const bk = JSON.parse(localStorage.getItem('gomesBookedSlots') || '{}');
+    bookedSet = bk[selDate] || [];
+  } catch(e){}
+
+  let html = '';
+  let anyEnabled = false;
+  for (let s = openM; s + dur <= closeM; s += 30){
+    const e = s + dur;
+    const overlapsLunch = s < le && e > ls;
+    const overlapsBooked = bookedSet.some(b => s < b.end && e > b.start);
+    const inPast = isToday && s <= nowMin;
+    const disabled = overlapsLunch || overlapsBooked || inPast;
+    const label = toTime(s);
+    if (!disabled) anyEnabled = true;
+    html += '<div class="slot' + (disabled?' dis':'') + (selSlot===label?' sel':'') + '" ' +
+      (disabled ? '' : 'onclick="selectSlot(\'' + label + '\')"') + '>' + label + '</div>';
+  }
+  document.getElementById('slotGrid').innerHTML = html || '<div style="grid-column:1/-1;font-size:12px;color:var(--muted)">Sem horários neste dia.</div>';
+  document.getElementById('slotHint').textContent = 'Duração estimada do agendamento: ' + fmtDuration(dur) + (!anyEnabled ? ' — tente outra data.' : '');
+}
+function selectSlot(label){
+  selSlot = label;
+  renderSlots();
+  renderSummary();
+}
+
+/* ============================================================
+   SHEET / MODAL controls
+   ============================================================ */
+function openSheet(){
+  renderDates();
+  renderCartUI();
+  document.getElementById('sheetOverlay').classList.add('show');
+}
+function closeSheet(){ document.getElementById('sheetOverlay').classList.remove('show'); }
+
+document.getElementById('modalOverlay').addEventListener('click', (e) => { if (e.target.id === 'modalOverlay') closeModal(); });
+document.getElementById('sheetOverlay').addEventListener('click', (e) => { if (e.target.id === 'sheetOverlay') closeSheet(); });
+document.getElementById('adminOverlay').addEventListener('click', (e) => { if (e.target.id === 'adminOverlay') closeAdmin(); });
+
+/* ============================================================
+   CLIENTE — PERSISTÊNCIA
+   ============================================================ */
+function saveClientDraft(){
+  const name = document.getElementById('clientName').value;
+  const phone = document.getElementById('clientPhone').value;
+  localStorage.setItem('gomesClient', JSON.stringify({name, phone}));
+}
+function loadClientDraft(){
+  try {
+    const c = JSON.parse(localStorage.getItem('gomesClient') || '{}');
+    if (c.name) document.getElementById('clientName').value = c.name;
+    if (c.phone) document.getElementById('clientPhone').value = c.phone;
+  } catch(e){}
+}
+document.getElementById('clientName').addEventListener('input', saveClientDraft);
+document.getElementById('clientPhone').addEventListener('input', saveClientDraft);
+
+/* ============================================================
+   REPETIR ÚLTIMO AGENDAMENTO
+   ============================================================ */
+function showRepeatBanner(){
+  try {
+    const last = JSON.parse(localStorage.getItem('gomesLastBooking') || 'null');
+    if (!last || !last.items || !last.items.length) return;
+    const names = last.items.map(i => findSvc(i.svcId)?.name).filter(Boolean);
+    if (!names.length) return;
+    document.getElementById('repeatSummary').textContent = names.slice(0,2).join(' + ') + (names.length > 2 ? '...' : '');
+    document.getElementById('repeatBanner').style.display = 'flex';
+  } catch(e){}
+}
+function repeatLast(){
+  try {
+    const last = JSON.parse(localStorage.getItem('gomesLastBooking') || 'null');
+    if (!last) return;
+    cart = last.items.map(i => ({ uid: Date.now()+Math.random(), svcId: i.svcId, qty: i.qty, obs: i.obs || '' }));
+    document.getElementById('repeatBanner').style.display = 'none';
+    renderCartUI();
+    openSheet();
+    showToast('Serviços do último agendamento carregados. Escolha a data e o horário.');
+  } catch(e){}
+}
+
+/* ============================================================
+   ENVIO — WHATSAPP
+   ============================================================ */
+function submitBooking(){
+  if (!cart.length){ showToast('Adicione ao menos um serviço.'); return; }
+  if (!selDate || !selSlot){ showToast('Escolha a data e o horário.'); return; }
+  const name = document.getElementById('clientName').value.trim();
+  const phone = document.getElementById('clientPhone').value.trim();
+  if (!name || !phone){ showToast('Preencha seu nome e WhatsApp.'); return; }
+
+  const t = cartTotals();
+  const [y,m,d] = selDate.split('-').map(Number);
+  const dateObj = new Date(y, m-1, d);
+  const dateLabel = WDAYS[dateObj.getDay()] + ' ' + String(d).padStart(2,'0') + '/' + String(m).padStart(2,'0');
+
+  const lines = [];
+  lines.push('*AGENDAMENTO — ' + BRAND.name + '*');
+  lines.push('');
+  lines.push('*Cliente:* ' + name);
+  lines.push('*WhatsApp:* ' + phone);
+  lines.push('*Data:* ' + dateLabel + ' às ' + selSlot);
+  lines.push('*Profissional:* ' + BRAND.barber);
+  lines.push('');
+  lines.push('*Serviços:*');
+  cart.forEach(l => {
+    const s = findSvc(l.svcId);
+    lines.push('• ' + l.qty + 'x ' + s.name + ' — ' + formatBRL(s.price) + ' (' + s.min + 'min)');
+    if (l.obs) lines.push('   _' + l.obs + '_');
+  });
+  lines.push('');
+  lines.push('*Duração estimada:* ' + fmtDuration(t.totalMin));
+  if (t.discount > 0) lines.push('*Desconto:* ' + coupon + ' (-' + formatBRL(t.discount) + ')');
+  lines.push('*Total estimado:* ' + formatBRL(t.total));
+  lines.push('*Pagamento:* no local (' + payment + ')');
+  lines.push('');
+  lines.push('_Confirmar no WhatsApp · agendamento feito pelo site_');
+
+  const msg = lines.join('\n');
+  const url = 'https://wa.me/' + BRAND.phone + '?text=' + encodeURIComponent(msg);
+
+  // salva localmente: rascunho do cliente + bloqueio informativo do horário + último agendamento
+  localStorage.setItem('gomesLastBooking', JSON.stringify({ items: cart.map(l => ({svcId:l.svcId, qty:l.qty, obs:l.obs})), ts: Date.now() }));
+  try {
+    const bk = JSON.parse(localStorage.getItem('gomesBookedSlots') || '{}');
+    if (!bk[selDate]) bk[selDate] = [];
+    const startM = toMin(selSlot);
+    bk[selDate].push({ start: startM, end: startM + (t.totalMin || 30) });
+    localStorage.setItem('gomesBookedSlots', JSON.stringify(bk));
+  } catch(e){}
+
+  window.open(url, '_blank');
+  showToast('Abrindo WhatsApp para confirmar...');
+}
+
+/* ============================================================
+   MAPA / TOAST
+   ============================================================ */
+function openMaps(){
+  window.open('https://www.google.com/maps/search/?api=1&query=' + BRAND.mapsCoords, '_blank');
+}
+let toastTimer = null;
+function showToast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+}
+
+/* ============================================================
+   ADMIN
+   ============================================================ */
+function openAdmin(){
+  const cfg = getAdminConfig();
+  document.getElementById('admLunchStart').value = cfg.lunchStart;
+  document.querySelectorAll('#admStatusGrid .pay-opt').forEach(o => o.classList.toggle('sel', o.dataset.s === cfg.forceStatus));
+  renderClosedDates(cfg);
+  document.getElementById('adminOverlay').classList.add('show');
+}
+function closeAdmin(){ document.getElementById('adminOverlay').classList.remove('show'); }
+document.getElementById('admStatusGrid').addEventListener('click', (e) => {
+  const opt = e.target.closest('.pay-opt');
+  if (!opt) return;
+  document.querySelectorAll('#admStatusGrid .pay-opt').forEach(o => o.classList.remove('sel'));
+  opt.classList.add('sel');
+});
+function renderClosedDates(cfg){
+  const list = document.getElementById('closedDatesList');
+  if (!cfg.closedDates.length){ list.innerHTML = ''; return; }
+  list.innerHTML = cfg.closedDates.sort().map(ds => {
+    const [y,m,d] = ds.split('-');
+    return '<div class="closed-date-item"><span>' + d + '/' + m + '/' + y + '</span><a onclick="removeClosedDate(\'' + ds + '\')">remover</a></div>';
+  }).join('');
+}
+function addClosedDate(){
+  const val = document.getElementById('admBlockDate').value;
+  if (!val) return;
+  const cfg = getAdminConfig();
+  if (!cfg.closedDates.includes(val)) cfg.closedDates.push(val);
+  setAdminConfig(cfg);
+  renderClosedDates(cfg);
+  document.getElementById('admBlockDate').value = '';
+}
+function removeClosedDate(ds){
+  const cfg = getAdminConfig();
+  cfg.closedDates = cfg.closedDates.filter(d => d !== ds);
+  setAdminConfig(cfg);
+  renderClosedDates(cfg);
+}
+function saveAdmin(){
+  const cfg = getAdminConfig();
+  cfg.lunchStart = document.getElementById('admLunchStart').value || '12:30';
+  cfg.lunchDur = 60;
+  const statusSel = document.querySelector('#admStatusGrid .pay-opt.sel');
+  cfg.forceStatus = statusSel ? statusSel.dataset.s : 'auto';
+  setAdminConfig(cfg);
+  updateStatus();
+  renderDates();
+  if (selDate) renderSlots();
+  closeAdmin();
+  showToast('Configurações salvas.');
+}
+
+/* ============================================================
+   PWA INSTALL (mobile only)
+   ============================================================ */
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const isMobile = window.matchMedia('(max-width: 768px)').matches || window.matchMedia('(pointer: coarse)').matches;
+  const dismissed = localStorage.getItem('gomesInstallDismissed');
+  const standalone = window.matchMedia('(display-mode: standalone)').matches;
+  if (isMobile && !dismissed && !standalone) document.getElementById('installBanner').style.display = 'flex';
+});
+function doInstall(){
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.finally(() => {
+    deferredPrompt = null;
+    document.getElementById('installBanner').style.display = 'none';
+  });
+}
+function dismissInstall(){
+  document.getElementById('installBanner').style.display = 'none';
+  localStorage.setItem('gomesInstallDismissed', '1');
+}
+
+/* ============================================================
+   DEEP LINK ?servico=ID
+   ============================================================ */
+function handleDeepLink(){
+  const params = new URLSearchParams(window.location.search);
+  const svcId = params.get('servico');
+  if (svcId && findSvc(svcId)) setTimeout(() => openModal(svcId), 300);
+  if (params.get('admin') === '1') setTimeout(openAdmin, 300);
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+renderCatalog();
+setupScrollspy();
+renderDates();
+loadClientDraft();
+renderCartUI();
+showRepeatBanner();
+updateStatus();
+setInterval(updateStatus, 30000);
+handleDeepLink();
+
+if ('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
