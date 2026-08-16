@@ -578,6 +578,55 @@ const BRAND = {
   barber: 'Jeferson'
 };
 
+/* ============================================================
+   SUPABASE — agenda compartilhada (evita 2 clientes no mesmo horário)
+   A publishable key é pública por design (protegida pelas regras RLS
+   configuradas no banco: só permite inserir agendamento e ler os
+   horários ocupados, nunca ler nome/telefone de outros clientes).
+   ============================================================ */
+const SUPABASE_URL = 'https://ggxlcetdkroazhrqglju.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_-x-wXARPUBieRZ7HRUAWAg_cYiyQk6X';
+let occupiedCache = {}; // date -> [{start,end}] | null (falha de rede)
+
+async function fetchOccupied(date){
+  try {
+    const res = await fetch(SUPABASE_URL + '/rest/v1/occupied_slots?appt_date=eq.' + date + '&select=start_min,end_min', {
+      headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY }
+    });
+    if (!res.ok) throw new Error('http ' + res.status);
+    const rows = await res.json();
+    return rows.map(r => ({ start: r.start_min, end: r.end_min }));
+  } catch (e){
+    return null;
+  }
+}
+async function getOccupied(date, forceRefresh){
+  if (!forceRefresh && occupiedCache[date] && occupiedCache[date] !== 'loading') return occupiedCache[date];
+  const result = await fetchOccupied(date);
+  occupiedCache[date] = result;
+  return result;
+}
+/* Retorna 'ok', 'conflict' (a trava do banco recusou por sobreposição real
+   de horário — 2 clientes tentaram ao mesmo tempo) ou 'error' (rede/outro). */
+async function insertBooking(payload){
+  try {
+    const res = await fetch(SUPABASE_URL + '/rest/v1/bookings', {
+      method: 'POST',
+      headers: {
+        apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY,
+        'Content-Type': 'application/json', Prefer: 'return=minimal'
+      },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) return 'ok';
+    const body = await res.json().catch(() => null);
+    if (body && body.code === '23P01') return 'conflict';
+    return 'error';
+  } catch (e){
+    return 'error';
+  }
+}
+
 /* SHA-256 do PIN do admin — não é a senha em texto puro, mas isto é um site
    estático sem backend: trate como uma trava simples contra curiosos, não
    como segurança real (qualquer um pode ler o código-fonte). */
@@ -962,7 +1011,7 @@ function selectDate(ds){
 function renderSlotsIfNeeded(){
   if (selDate) renderSlots();
 }
-function renderSlots(){
+async function renderSlots(forceRefresh){
   const cfg = getAdminConfig();
   const t = cartTotals();
   const dur = t.totalMin || 30;
@@ -974,11 +1023,19 @@ function renderSlots(){
   const ls = toMin(cfg.lunchStart), le = ls + cfg.lunchDur;
   const openM = 9*60, closeM = 19*60+30;
 
-  let bookedSet = [];
-  try {
-    const bk = JSON.parse(localStorage.getItem('gomesBookedSlots') || '{}');
-    bookedSet = bk[selDate] || [];
-  } catch(e){}
+  const requestDate = selDate;
+  document.getElementById('slotHint').textContent = 'Consultando horários disponíveis...';
+  let bookedSet = await getOccupied(requestDate, forceRefresh);
+  if (selDate !== requestDate) return; // usuário já trocou de data enquanto consultava
+
+  let offlineNote = '';
+  if (bookedSet === null){
+    try {
+      const bk = JSON.parse(localStorage.getItem('gomesBookedSlots') || '{}');
+      bookedSet = bk[requestDate] || [];
+    } catch (e){ bookedSet = []; }
+    offlineNote = ' — sem conexão, mostrando só seus horários salvos neste aparelho';
+  }
 
   let html = '';
   let anyEnabled = false;
@@ -994,7 +1051,7 @@ function renderSlots(){
       (disabled ? '' : 'onclick="selectSlot(\'' + label + '\')"') + '>' + label + '</div>';
   }
   document.getElementById('slotGrid').innerHTML = html || '<div style="grid-column:1/-1;font-size:12px;color:var(--muted)">Sem horários neste dia.</div>';
-  document.getElementById('slotHint').textContent = 'Duração estimada do agendamento: ' + fmtDuration(dur) + (!anyEnabled ? ' — tente outra data.' : '');
+  document.getElementById('slotHint').textContent = 'Duração estimada do agendamento: ' + fmtDuration(dur) + (!anyEnabled ? ' — tente outra data.' : '') + offlineNote;
 }
 function selectSlot(label){
   selSlot = label;
@@ -1063,7 +1120,7 @@ function repeatLast(){
 /* ============================================================
    ENVIO — WHATSAPP
    ============================================================ */
-function submitBooking(){
+async function submitBooking(){
   if (!cart.length){ showToast('Adicione ao menos um serviço.'); return; }
   if (!selDate || !selSlot){ showToast('Escolha a data e o horário.'); return; }
   const name = document.getElementById('clientName').value.trim();
@@ -1071,6 +1128,26 @@ function submitBooking(){
   if (!name || !phone){ showToast('Preencha seu nome e WhatsApp.'); return; }
 
   const t = cartTotals();
+  const startM = toMin(selSlot);
+  const endM = startM + (t.totalMin || 30);
+
+  // última checagem, em tempo real, pra evitar 2 clientes no mesmo horário
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = true;
+  const freshOccupied = await fetchOccupied(selDate);
+  submitBtn.disabled = false;
+  if (freshOccupied !== null){
+    occupiedCache[selDate] = freshOccupied;
+    const conflict = freshOccupied.some(b => startM < b.end && endM > b.start);
+    if (conflict){
+      showToast('Esse horário acabou de ser reservado por outra pessoa. Escolha outro.');
+      selSlot = null;
+      renderSlots(true);
+      renderSummary();
+      return;
+    }
+  }
+
   const [y,m,d] = selDate.split('-').map(Number);
   const dateObj = new Date(y, m-1, d);
   const dateLabel = WDAYS[dateObj.getDay()] + ' ' + String(d).padStart(2,'0') + '/' + String(m).padStart(2,'0');
@@ -1100,13 +1177,34 @@ function submitBooking(){
   const msg = lines.join('\n');
   const url = 'https://wa.me/' + BRAND.phone + '?text=' + encodeURIComponent(msg);
 
-  // salva localmente: rascunho do cliente + bloqueio informativo do horário + último agendamento
+  // grava no banco compartilhado — assim outros clientes já veem esse horário ocupado.
+  // o próprio banco tem uma trava (exclusion constraint) que recusa sobreposição
+  // de verdade, mesmo que 2 pessoas cliquem "confirmar" no mesmíssimo instante.
+  const saveResult = await insertBooking({
+    appt_date: selDate, start_min: startM, end_min: endM,
+    services: cart.map(l => ({ id: l.svcId, name: findSvc(l.svcId).name, qty: l.qty, obs: l.obs || null })),
+    client_name: name, client_phone: phone, payment: payment, coupon: coupon || null
+  });
+  if (saveResult === 'conflict'){
+    showToast('Esse horário acabou de ser reservado por outra pessoa. Escolha outro.');
+    selSlot = null;
+    renderSlots(true);
+    renderSummary();
+    return;
+  }
+  if (saveResult === 'ok'){
+    if (!occupiedCache[selDate] || occupiedCache[selDate] === null) occupiedCache[selDate] = [];
+    occupiedCache[selDate].push({ start: startM, end: endM });
+  } else {
+    showToast('Sem conexão com o servidor — o horário foi reservado só neste aparelho.');
+  }
+
+  // rascunho local: cliente + último agendamento (pro botão "repetir") + fallback offline
   localStorage.setItem('gomesLastBooking', JSON.stringify({ items: cart.map(l => ({svcId:l.svcId, qty:l.qty, obs:l.obs})), ts: Date.now() }));
   try {
     const bk = JSON.parse(localStorage.getItem('gomesBookedSlots') || '{}');
     if (!bk[selDate]) bk[selDate] = [];
-    const startM = toMin(selSlot);
-    bk[selDate].push({ start: startM, end: startM + (t.totalMin || 30) });
+    bk[selDate].push({ start: startM, end: endM });
     localStorage.setItem('gomesBookedSlots', JSON.stringify(bk));
   } catch(e){}
 
