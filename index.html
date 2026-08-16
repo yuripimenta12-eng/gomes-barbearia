@@ -168,6 +168,8 @@ input,textarea,select{font-family:inherit}
     linear-gradient(160deg,#171208,#0b0a07);
   display:flex;align-items:center;justify-content:center}
 .svc-photo svg{width:32px;height:32px;stroke:var(--gold);fill:none;opacity:.8}
+.svc-photo.has-img{padding:0}
+.svc-photo.has-img img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(.15) contrast(1.05)}
 .svc-info{flex:1;padding:12px 14px;display:flex;flex-direction:column;justify-content:center;min-width:0;gap:5px}
 .svc-name{font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--cream);letter-spacing:.5px;text-transform:uppercase;line-height:1.25}
 .svc-desc{font-size:11px;color:var(--bronze);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -203,6 +205,8 @@ input,textarea,select{font-family:inherit}
     linear-gradient(160deg,#171208,#0b0a07);
   display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;border-bottom:1px solid var(--border)}
 .modal-hero svg{width:52px;height:52px;stroke:var(--gold);fill:none;opacity:.8}
+.modal-hero.has-img{background:#000}
+.modal-hero.has-img img{width:100%;height:100%;object-fit:cover;object-position:top center;filter:grayscale(.15) contrast(1.05)}
 .modal-close{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:rgba(9,9,8,.7);border:1px solid var(--border);color:var(--gold);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px}
 .modal-body{padding:18px 20px;overflow-y:auto;flex:1;min-height:0}
 .modal-name{font-size:19px;color:var(--gold-light);letter-spacing:.5px;margin-bottom:8px;font-weight:700}
@@ -423,7 +427,7 @@ textarea.field-input{resize:vertical;min-height:64px;line-height:1.5}
 <!-- SERVICE MODAL -->
 <div class="overlay" id="modalOverlay">
   <div class="modal-panel">
-    <div class="modal-hero">
+    <div class="modal-hero" id="modalHero">
       <button class="modal-close" onclick="closeModal()">&times;</button>
       <svg id="modalIcon" viewBox="0 0 24 24" stroke-width="1.5"></svg>
     </div>
@@ -643,29 +647,29 @@ const ICONS = {
    CATÁLOGO DE SERVIÇOS
    ============================================================ */
 const SERVICES = [
-  {id:'c1', cat:'cortes', name:'Corte de Pente Único', price:19, min:30, desc:'Corte à máquina com pente único, acabamento limpo e uniforme em toda a cabeça.'},
-  {id:'c2', cat:'cortes', name:'Corte Disfarçado', price:23, min:30, desc:'Transição suave entre as laterais e o topo, sem marcação abrupta.'},
-  {id:'c3', cat:'cortes', name:'Corte Navalhado', price:27, min:30, desc:'Acabamento fino na navalha para linhas e contornos precisos.'},
-  {id:'c4', cat:'cortes', name:'Corte Degradê / Fade', price:25, min:40, desc:'Degradê progressivo nas laterais, do baixo ao alto conforme seu estilo.'},
-  {id:'c5', cat:'cortes', name:'Corte de Tesoura', price:35, min:40, desc:'Corte 100% na tesoura, preservando textura e movimento natural do cabelo.'},
+  {id:'c1', cat:'cortes', name:'Corte de Pente Único', price:19, min:30, desc:'Corte à máquina com pente único, acabamento limpo e uniforme em toda a cabeça.', photo:'img/c1.jpg'},
+  {id:'c2', cat:'cortes', name:'Corte Disfarçado', price:23, min:30, desc:'Transição suave entre as laterais e o topo, sem marcação abrupta.', photo:'img/c2.jpg'},
+  {id:'c3', cat:'cortes', name:'Corte Navalhado', price:27, min:30, desc:'Acabamento fino na navalha para linhas e contornos precisos.', photo:'img/c3.jpg'},
+  {id:'c4', cat:'cortes', name:'Corte Degradê / Fade', price:25, min:40, desc:'Degradê progressivo nas laterais, do baixo ao alto conforme seu estilo.', photo:'img/c4.jpg'},
+  {id:'c5', cat:'cortes', name:'Corte de Tesoura', price:35, min:40, desc:'Corte 100% na tesoura, preservando textura e movimento natural do cabelo.', photo:'img/c5.jpg'},
 
-  {id:'t1', cat:'tratamentos', name:'Pigmentação', price:19, min:30, desc:'Disfarça falhas e uniformiza a cor de cabelo e barba.'},
-  {id:'t2', cat:'tratamentos', name:'Luzes', price:55, min:60, desc:'Mechas para iluminar o visual com efeito natural.'},
-  {id:'t3', cat:'tratamentos', name:'Platinado', price:100, min:90, desc:'Descoloração completa com tonalização para um visual platinado uniforme.'},
-  {id:'t4', cat:'tratamentos', name:'Limpeza de Pele Simples', price:25, min:30, desc:'Limpeza facial pós-corte para deixar a pele saudável e renovada.'},
+  {id:'t1', cat:'tratamentos', name:'Pigmentação', price:19, min:30, desc:'Disfarça falhas e uniformiza a cor de cabelo e barba.', photo:'img/t1.jpg'},
+  {id:'t2', cat:'tratamentos', name:'Luzes', price:55, min:60, desc:'Mechas para iluminar o visual com efeito natural.', photo:'img/t2.jpg'},
+  {id:'t3', cat:'tratamentos', name:'Platinado', price:100, min:90, desc:'Descoloração completa com tonalização para um visual platinado uniforme.', photo:'img/t3.jpg'},
+  {id:'t4', cat:'tratamentos', name:'Limpeza de Pele Simples', price:25, min:30, desc:'Limpeza facial pós-corte para deixar a pele saudável e renovada.', photo:'img/t4.jpg'},
 
-  {id:'cb1', cat:'combos', name:'Corte Disfarçado + Tesoura', price:29, min:40},
-  {id:'cb2', cat:'combos', name:'Corte Disfarçado + Barba', price:40, min:50},
-  {id:'cb3', cat:'combos', name:'Corte Navalhado + Barba', price:44, min:50},
-  {id:'cb4', cat:'combos', name:'Corte de Pente Único + Barba', price:36, min:50},
+  {id:'cb1', cat:'combos', name:'Corte Disfarçado + Tesoura', price:29, min:40, photo:'img/cb1.jpg'},
+  {id:'cb2', cat:'combos', name:'Corte Disfarçado + Barba', price:40, min:50, photo:'img/cb2.jpg'},
+  {id:'cb3', cat:'combos', name:'Corte Navalhado + Barba', price:44, min:50, photo:'img/cb3.jpg'},
+  {id:'cb4', cat:'combos', name:'Corte de Pente Único + Barba', price:36, min:50, photo:'img/cb4.jpg'},
   {id:'cb5', cat:'combos', name:'Corte Disfarçado + Sobrancelha', price:33, min:45},
-  {id:'cb6', cat:'combos', name:'Corte Degradê/Fade + Barba', price:42, min:60},
-  {id:'cb7', cat:'combos', name:'Corte Degradê/Fade + Sobrancelha', price:35, min:55},
-  {id:'cb8', cat:'combos', name:'Corte Navalhado + Sobrancelha', price:37, min:45},
+  {id:'cb6', cat:'combos', name:'Corte Degradê/Fade + Barba', price:42, min:60, photo:'img/cb6.jpg'},
+  {id:'cb7', cat:'combos', name:'Corte Degradê/Fade + Sobrancelha', price:35, min:55, photo:'img/cb7.jpg'},
+  {id:'cb8', cat:'combos', name:'Corte Navalhado + Sobrancelha', price:37, min:45, photo:'img/cb8.jpg'},
   {id:'cb9', cat:'combos', name:'Pé de Cabelo + Barba', price:25, min:35},
-  {id:'cb10', cat:'combos', name:'Pé de Cabelo + Sobrancelha', price:20, min:30},
-  {id:'cb11', cat:'combos', name:'Corte Disfarçado + Tesoura + Sobrancelha', price:39, min:55},
-  {id:'cb12', cat:'combos', name:'Corte de Tesoura + Sobrancelha e Barba', price:62, min:75},
+  {id:'cb10', cat:'combos', name:'Pé de Cabelo + Sobrancelha', price:20, min:30, photo:'img/cb10.jpg'},
+  {id:'cb11', cat:'combos', name:'Corte Disfarçado + Tesoura + Sobrancelha', price:39, min:55, photo:'img/cb11.jpg'},
+  {id:'cb12', cat:'combos', name:'Corte de Tesoura + Sobrancelha e Barba', price:62, min:75, photo:'img/cb12.jpg'},
   {id:'cb13', cat:'combos', name:'Navalhado + Barba + Sobrancelha', price:54, min:65},
   {id:'cb14', cat:'combos', name:'Corte Disfarçado + Barba + Sobrancelha', price:50, min:65},
   {id:'cb15', cat:'combos', name:'Corte Degradê/Fade + Barba + Sobrancelha', price:52, min:75},
@@ -765,8 +769,11 @@ function renderCatalog(){
   main.innerHTML = CATS.map(cat => {
     const items = SERVICES.filter(s => s.cat === cat.id);
     const cardsHtml = items.map(s => {
+      const photoInner = s.photo
+        ? '<img src="' + s.photo + '" alt="' + esc(s.name) + '" loading="lazy">'
+        : svcPhotoIcon(cat.id);
       return '<div class="svc-card" onclick="openModal(\'' + s.id + '\')">' +
-        '<div class="svc-photo">' + svcPhotoIcon(cat.id) + '</div>' +
+        '<div class="svc-photo' + (s.photo ? ' has-img' : '') + '">' + photoInner + '</div>' +
         '<div class="svc-info">' +
           '<div class="svc-name">' + esc(s.name) + '</div>' +
           (s.desc ? '<div class="svc-desc">' + esc(s.desc) + '</div>' : '') +
@@ -809,7 +816,14 @@ function setupScrollspy(){
 function openModal(id){
   modalSvc = findSvc(id);
   modalQtyVal = 1;
-  document.getElementById('modalIcon').innerHTML = ICONS[modalSvc.cat];
+  const hero = document.getElementById('modalHero');
+  if (modalSvc.photo){
+    hero.classList.add('has-img');
+    hero.innerHTML = '<button class="modal-close" onclick="closeModal()">&times;</button><img src="' + modalSvc.photo + '" alt="' + esc(modalSvc.name) + '">';
+  } else {
+    hero.classList.remove('has-img');
+    hero.innerHTML = '<button class="modal-close" onclick="closeModal()">&times;</button><svg id="modalIcon" viewBox="0 0 24 24" stroke-width="1.5">' + ICONS[modalSvc.cat] + '</svg>';
+  }
   document.getElementById('modalName').textContent = modalSvc.name;
   document.getElementById('modalPrice').textContent = formatBRL(modalSvc.price);
   document.getElementById('modalDur').textContent = '🕐 ' + modalSvc.min + 'min';
