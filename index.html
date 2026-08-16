@@ -71,7 +71,7 @@
   --radius:6px;
   --maxw:560px;
 }
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;background:var(--black)}
 body{
   font-family:'Montserrat',sans-serif;
   background:var(--black);
@@ -105,7 +105,7 @@ input,textarea,select{font-family:inherit}
 .sdot{animation:pulse 1.6s ease-in-out infinite}
 
 /* ============ HEADER ============ */
-.hdr{background:var(--black-2);border-bottom:1px solid var(--border);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:60}
+.hdr{background:var(--black-2);border-bottom:1px solid var(--border);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:60;-webkit-transform:translateZ(0);transform:translateZ(0);-webkit-backface-visibility:hidden;backface-visibility:hidden}
 .hdr-brand{display:flex;align-items:center;gap:10px}
 .hdr-mark{width:30px;height:30px;flex-shrink:0}
 .hdr-name{font-size:17px;letter-spacing:4px;color:var(--gold)}
@@ -148,7 +148,7 @@ input,textarea,select{font-family:inherit}
 .banner-close{background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:2px 6px;flex-shrink:0}
 
 /* ============ TABS (scrollspy) ============ */
-.tabs{display:flex;background:var(--black-2);border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:57px;z-index:55;scrollbar-width:none}
+.tabs{display:flex;background:var(--black-2);border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:57px;z-index:55;scrollbar-width:none;-webkit-transform:translateZ(0);transform:translateZ(0);-webkit-backface-visibility:hidden;backface-visibility:hidden}
 .tabs::-webkit-scrollbar{display:none}
 .tab{flex-shrink:0;padding:13px 18px;text-align:center;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:6px;transition:color .2s,border-color .2s}
 .tab svg{width:14px;height:14px;stroke:currentColor;fill:none}
