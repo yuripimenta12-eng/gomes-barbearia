@@ -523,29 +523,42 @@ textarea.field-input{resize:vertical;min-height:64px;line-height:1.5}
       <button class="sh-close" onclick="closeAdmin()">&times;</button>
     </div>
     <div class="sh-foot" style="padding:16px 20px">
-      <div class="admin-note">Visível só pra você (fica salvo neste navegador). Aqui você ajusta o horário de almoço, força aberto/fechado e bloqueia datas específicas.</div>
 
-      <div class="section-label" style="margin-top:0">Horário de almoço (1h)</div>
-      <label class="field-label">Início da pausa</label>
-      <input class="field-input" id="admLunchStart" type="time" value="12:30">
-
-      <div class="section-label">Status da loja</div>
-      <div class="admin-status-grid" id="admStatusGrid">
-        <div class="pay-opt sel" data-s="auto">Automático</div>
-        <div class="pay-opt" data-s="open">Forçar Aberto</div>
-        <div class="pay-opt" data-s="closed">Forçar Fechado</div>
+      <div id="adminGate">
+        <div class="admin-note">Área restrita. Digite o PIN pra continuar.</div>
+        <label class="field-label">PIN</label>
+        <input class="field-input" id="admPassInput" type="password" placeholder="••••••••" autocomplete="off">
+        <div class="coupon-msg err" id="admPassMsg"></div>
+        <button class="btn btn-gold btn-block" onclick="checkAdminPassword()">Entrar</button>
       </div>
 
-      <div class="section-label">Bloquear uma data</div>
-      <div style="display:flex;gap:8px">
-        <input class="field-input" id="admBlockDate" type="date">
-        <button class="btn btn-outline btn-sm" onclick="addClosedDate()">Bloquear</button>
-      </div>
-      <div id="closedDatesList"></div>
+      <div id="adminSettings" style="display:none">
+        <div class="admin-note">Visível só pra você (fica salvo neste navegador). Aqui você ajusta o horário de almoço, força aberto/fechado e bloqueia datas específicas.</div>
 
-      <div class="submit-wrap">
-        <button class="btn btn-gold btn-block" onclick="saveAdmin()">Salvar Configurações</button>
+        <div class="section-label" style="margin-top:0">Horário de almoço (1h)</div>
+        <label class="field-label">Início da pausa</label>
+        <input class="field-input" id="admLunchStart" type="time" value="12:30">
+
+        <div class="section-label">Status da loja</div>
+        <div class="admin-status-grid" id="admStatusGrid">
+          <div class="pay-opt sel" data-s="auto">Automático</div>
+          <div class="pay-opt" data-s="open">Forçar Aberto</div>
+          <div class="pay-opt" data-s="closed">Forçar Fechado</div>
+        </div>
+
+        <div class="section-label">Bloquear uma data</div>
+        <div style="display:flex;gap:8px">
+          <input class="field-input" id="admBlockDate" type="date">
+          <button class="btn btn-outline btn-sm" onclick="addClosedDate()">Bloquear</button>
+        </div>
+        <div id="closedDatesList"></div>
+
+        <div class="submit-wrap">
+          <button class="btn btn-gold btn-block" onclick="saveAdmin()">Salvar Configurações</button>
+          <button class="btn btn-outline btn-block" style="margin-top:8px" onclick="adminLogout()">Sair</button>
+        </div>
       </div>
+
     </div>
   </div>
 </div>
@@ -564,6 +577,11 @@ const BRAND = {
   mapsCoords: '-12.91173506225075,-38.42943307021991',
   barber: 'Jeferson'
 };
+
+/* SHA-256 do PIN do admin — não é a senha em texto puro, mas isto é um site
+   estático sem backend: trate como uma trava simples contra curiosos, não
+   como segurança real (qualquer um pode ler o código-fonte). */
+const ADMIN_PASS_HASH = 'd54987c931cf4402015dd1d7c4deaac5eb1b13229fc18a480eff2ac6ed54fad9';
 
 const ICONS = {
   cortes: '<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12"/>',
@@ -1015,6 +1033,7 @@ function loadClientDraft(){
 }
 document.getElementById('clientName').addEventListener('input', saveClientDraft);
 document.getElementById('clientPhone').addEventListener('input', saveClientDraft);
+document.getElementById('admPassInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') checkAdminPassword(); });
 
 /* ============================================================
    REPETIR ÚLTIMO AGENDAMENTO
@@ -1113,12 +1132,45 @@ function showToast(msg){
 /* ============================================================
    ADMIN
    ============================================================ */
-function openAdmin(){
+async function sha256Hex(text){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+function isAdminAuthed(){ return localStorage.getItem('gomesAdminAuthed') === '1'; }
+function showAdminGate(){
+  document.getElementById('adminGate').style.display = 'block';
+  document.getElementById('adminSettings').style.display = 'none';
+  document.getElementById('admPassInput').value = '';
+  document.getElementById('admPassMsg').textContent = '';
+}
+function showAdminSettings(){
   const cfg = getAdminConfig();
   document.getElementById('admLunchStart').value = cfg.lunchStart;
   document.querySelectorAll('#admStatusGrid .pay-opt').forEach(o => o.classList.toggle('sel', o.dataset.s === cfg.forceStatus));
   renderClosedDates(cfg);
+  document.getElementById('adminGate').style.display = 'none';
+  document.getElementById('adminSettings').style.display = 'block';
+}
+async function checkAdminPassword(){
+  const val = document.getElementById('admPassInput').value;
+  const msg = document.getElementById('admPassMsg');
+  if (!val){ msg.textContent = 'Digite o PIN.'; return; }
+  const hash = await sha256Hex(val);
+  if (hash === ADMIN_PASS_HASH){
+    localStorage.setItem('gomesAdminAuthed', '1');
+    showAdminSettings();
+  } else {
+    msg.textContent = 'PIN incorreto.';
+  }
+}
+function adminLogout(){
+  localStorage.removeItem('gomesAdminAuthed');
+  showAdminGate();
+}
+function openAdmin(){
   document.getElementById('adminOverlay').classList.add('show');
+  if (isAdminAuthed()) showAdminSettings();
+  else showAdminGate();
 }
 function closeAdmin(){ document.getElementById('adminOverlay').classList.remove('show'); }
 document.getElementById('admStatusGrid').addEventListener('click', (e) => {
