@@ -316,10 +316,15 @@ textarea.field-input{resize:vertical;min-height:64px;line-height:1.5}
 /* ============================================================
    EFEITO — confirmação de agendamento (antes do WhatsApp)
    ============================================================ */
-#booking-overlay{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;
+#booking-overlay{position:fixed;inset:0;z-index:300;display:grid;grid-template-columns:100%;place-items:center;
   background:radial-gradient(ellipse at 50% 40%,#161109 0%,#050504 75%);
   opacity:0;pointer-events:none;transition:opacity .35s ease}
 #booking-overlay.ativo{opacity:1;pointer-events:auto}
+
+/* #booking-loading e #booking-confirm ficam empilhados na mesma célula do grid —
+   assim eles não disputam largura um do outro (o que encolhia tudo quando eram
+   irmãos num flex row, mesmo o que estava com opacity:0 fora da tela) */
+#booking-loading,#booking-confirm{grid-area:1/1}
 
 #booking-loading{display:flex;flex-direction:column;align-items:center;gap:22px;padding:24px;width:100%;max-width:320px}
 #booking-servico{font-family:'Cinzel',serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);opacity:0;text-align:center;min-height:16px}
@@ -1369,13 +1374,22 @@ function bkAnimarLetrasServico(el){
   if(!texto) return;
   el.innerHTML = '';
   el.style.opacity = '1';
-  [...texto].forEach((c, i) => {
-    const sp = document.createElement('span');
-    sp.className = 'letra';
-    sp.textContent = c === ' ' ? ' ' : c;
-    sp.style.cssText = `display:inline-block;opacity:0;transform:translateY(10px) scale(.85);
-      transition:opacity .22s ease ${i*.05}s, transform .30s cubic-bezier(.34,1.4,.64,1) ${i*.05}s;`;
-    el.appendChild(sp);
+  let i = 0;
+  const palavras = texto.split(' ');
+  palavras.forEach((palavra, wi) => {
+    const wordSpan = document.createElement('span');
+    wordSpan.style.cssText = 'display:inline-block;white-space:nowrap;';
+    [...palavra].forEach((c) => {
+      const sp = document.createElement('span');
+      sp.className = 'letra';
+      sp.textContent = c;
+      sp.style.cssText = `display:inline-block;opacity:0;transform:translateY(10px) scale(.85);
+        transition:opacity .22s ease ${i*.05}s, transform .30s cubic-bezier(.34,1.4,.64,1) ${i*.05}s;`;
+      wordSpan.appendChild(sp);
+      i++;
+    });
+    el.appendChild(wordSpan);
+    if(wi < palavras.length - 1) el.appendChild(document.createTextNode(' '));
   });
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     el.querySelectorAll('.letra').forEach(sp=>{
