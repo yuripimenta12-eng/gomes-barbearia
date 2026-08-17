@@ -375,7 +375,7 @@ textarea.field-input{resize:vertical;min-height:64px;line-height:1.5}
 #confirm-textos.aparecer{opacity:1}
 #confirm-titulo{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--ok);letter-spacing:2px;margin-bottom:6px}
 #confirm-titulo .letra{display:inline-block;opacity:0;transform:translateY(8px) scale(.7)}
-#confirm-sub{font-size:12.5px;color:var(--muted);line-height:1.6;max-width:260px}
+#confirm-sub{font-size:12.5px;color:var(--muted);line-height:1.6;max-width:260px;margin:0 auto}
 
 #confirm-btn-ok{margin-top:18px;display:flex;align-items:center;gap:8px;padding:13px 24px;border:none;border-radius:8px;
   background:linear-gradient(135deg,var(--bronze),var(--gold-light),var(--bronze));color:var(--black);
@@ -1354,12 +1354,21 @@ async function bkSetStatus(txt){
 function bkAnimarLetras(el){
   const texto=el.textContent;
   el.innerHTML='';
-  [...texto].forEach((c,i)=>{
-    const sp=document.createElement('span');
-    sp.className='letra';
-    sp.textContent=c===' '?' ':c;
-    sp.style.transition=`opacity .28s ease ${i*.038}s, transform .34s cubic-bezier(.34,1.56,.64,1) ${i*.038}s`;
-    el.appendChild(sp);
+  let i=0;
+  const palavras=texto.split(' ');
+  palavras.forEach((palavra,wi)=>{
+    const wordSpan=document.createElement('span');
+    wordSpan.style.cssText='display:inline-block;white-space:nowrap;';
+    [...palavra].forEach((c)=>{
+      const sp=document.createElement('span');
+      sp.className='letra';
+      sp.textContent=c;
+      sp.style.transition=`opacity .28s ease ${i*.038}s, transform .34s cubic-bezier(.34,1.56,.64,1) ${i*.038}s`;
+      wordSpan.appendChild(sp);
+      i++;
+    });
+    el.appendChild(wordSpan);
+    if(wi<palavras.length-1) el.appendChild(document.createTextNode(' '));
   });
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     el.querySelectorAll('.letra').forEach(sp=>{
