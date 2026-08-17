@@ -355,12 +355,12 @@ textarea.field-input{resize:vertical;min-height:64px;line-height:1.5}
 #booking-confirm.mostrando{opacity:1;pointer-events:auto;transform:scale(1)}
 
 #confirm-squircle{width:84px;height:84px;border-radius:28%;
-  background:linear-gradient(135deg,var(--bronze),var(--gold-light) 55%,var(--bronze));
+  background:var(--black-2);border:1.5px solid rgba(76,175,80,.5);
   display:flex;align-items:center;justify-content:center;
   transform:scale(0) rotate(-20deg);opacity:0;margin-bottom:6px;
-  box-shadow:0 8px 30px rgba(225,188,134,.25)}
+  box-shadow:0 8px 30px rgba(76,175,80,.25)}
 #confirm-squircle.entrar{transition:transform .5s cubic-bezier(.34,1.56,.64,1),opacity .3s ease;transform:scale(1) rotate(0deg);opacity:1}
-@keyframes squircleBrilho{0%,100%{box-shadow:0 8px 30px rgba(225,188,134,.25)}50%{box-shadow:0 8px 44px rgba(225,188,134,.6)}}
+@keyframes squircleBrilho{0%,100%{box-shadow:0 8px 30px rgba(76,175,80,.25)}50%{box-shadow:0 8px 44px rgba(76,175,80,.65)}}
 #confirm-squircle.brilhando{animation:squircleBrilho 1.6s ease-in-out infinite}
 #confirm-check{width:38px;height:38px}
 #confirm-check .check-path{stroke-dasharray:46;stroke-dashoffset:46}
@@ -368,7 +368,7 @@ textarea.field-input{resize:vertical;min-height:64px;line-height:1.5}
 
 #confirm-textos{text-align:center;opacity:0;transition:opacity .2s ease}
 #confirm-textos.aparecer{opacity:1}
-#confirm-titulo{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--gold);letter-spacing:2px;margin-bottom:6px}
+#confirm-titulo{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--ok);letter-spacing:2px;margin-bottom:6px}
 #confirm-titulo .letra{display:inline-block;opacity:0;transform:translateY(8px) scale(.7)}
 #confirm-sub{font-size:12.5px;color:var(--muted);line-height:1.6;max-width:260px}
 
@@ -579,8 +579,8 @@ textarea.field-input{resize:vertical;min-height:64px;line-height:1.5}
 
       <div class="submit-wrap">
         <button class="btn btn-gold btn-block" id="submitBtn" onclick="submitBooking()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.4 0-.5C10 9 9.4 7.6 9.1 7c-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2.1 3.2 5 4.4.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3ZM12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2Z"/></svg>
-          Confirmar no WhatsApp
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>
+          Agendar
         </button>
       </div>
     </div>
@@ -669,16 +669,16 @@ textarea.field-input{resize:vertical;min-height:64px;line-height:1.5}
   <div id="booking-confirm">
     <div id="confirm-squircle">
       <svg id="confirm-check" viewBox="0 0 52 52" fill="none">
-        <path class="check-path" d="M14 27 L22 35 L39 16" stroke="#090908" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path class="check-path" d="M14 27 L22 35 L39 16" stroke="#4caf50" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </div>
     <div id="confirm-textos">
-      <div id="confirm-titulo">Agendado!</div>
-      <div id="confirm-sub">Você será direcionado ao WhatsApp pra confirmar</div>
+      <div id="confirm-titulo">Confirmado com sucesso</div>
+      <div id="confirm-sub">Seu agendamento foi validado.</div>
     </div>
     <button id="confirm-btn-ok" type="button">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.4 0-.5C10 9 9.4 7.6 9.1 7c-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2.1 3.2 5 4.4.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3ZM12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2Z"/></svg>
-      Ir para o WhatsApp
+      Confirmar no WhatsApp
     </button>
   </div>
 </div>
@@ -1274,6 +1274,13 @@ const bkSquircle  = document.getElementById('confirm-squircle');
 const bkCheckSvg  = document.getElementById('confirm-check');
 const bkTextosEl  = document.getElementById('confirm-textos');
 const bkTituloEl  = document.getElementById('confirm-titulo');
+let bkFecharSemConfirmar = null;
+bkOverlay.addEventListener('click', (e) => {
+  if (e.target === bkOverlay && bkConfirmEl.classList.contains('mostrando') && bkFecharSemConfirmar) bkFecharSemConfirmar();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && bkOverlay.classList.contains('ativo') && bkConfirmEl.classList.contains('mostrando') && bkFecharSemConfirmar) bkFecharSemConfirmar();
+});
 
 const bkRingD = BK_CFG.orbitaRaio * 2 + 50;
 bkOrbitRing.style.cssText += `width:${bkRingD}px;height:${bkRingD}px;`;
@@ -1567,7 +1574,7 @@ function bkResetVisual(){
 
 /* Toca a animação em paralelo com a checagem/gravação real (workPromise),
    e só mostra o "check" de confirmado se workPromise resolver com sucesso. */
-function tocarAnimacaoAgendamento(nomeServico, workPromise){
+function tocarAnimacaoAgendamento(nomeServico, workPromise, onConfirmar){
   return new Promise((resolveOuter) => {
     (async () => {
       bkOverlay.classList.remove('confirmado');
@@ -1629,23 +1636,8 @@ function tocarAnimacaoAgendamento(nomeServico, workPromise){
       bkOkBtn.classList.add('aparecer','pulsando');
       bkOkBtn.focus();
 
-      const cdLine=document.createElement('div');
-      cdLine.id='cd-line';
-      cdLine.style.cssText=`height:2px;border-radius:1px;width:56px;
-        background:linear-gradient(90deg,var(--gold-light),var(--gold));
-        transform-origin:left center;will-change:transform;margin-top:10px;`;
-      bkConfirmEl.appendChild(cdLine);
-      requestAnimationFrame(()=>requestAnimationFrame(()=>{
-        cdLine.style.transition=`transform ${BK_CFG.delayFecha}ms linear`;
-        cdLine.style.transform='scaleX(0)';
-      }));
-
       let jaFechou = false;
-      const finalizar = () => {
-        if (jaFechou) return;
-        jaFechou = true;
-        clearTimeout(autoTimer);
-        bkOkBtn.removeEventListener('click', finalizar);
+      const fecharVisual = () => {
         bkSquircle.style.transition='transform .22s cubic-bezier(.5,0,1,.6),opacity .18s ease';
         bkSquircle.style.transform='scale(.8) rotate(8deg)';
         bkSquircle.style.opacity='0';
@@ -1658,10 +1650,26 @@ function tocarAnimacaoAgendamento(nomeServico, workPromise){
           bkOverlay.classList.remove('ativo','confirmado');
           setTimeout(bkResetVisual, 380);
         }, 200);
+      };
+      // clicar no botão dispara o callback (abre o WhatsApp) DENTRO do próprio
+      // clique real do usuário — necessário pro navegador não bloquear como pop-up
+      const confirmarClick = () => {
+        if (jaFechou) return;
+        jaFechou = true;
+        bkOkBtn.removeEventListener('click', confirmarClick);
+        if (typeof onConfirmar === 'function') onConfirmar();
+        fecharVisual();
         resolveOuter(outcome);
       };
-      const autoTimer = setTimeout(finalizar, BK_CFG.delayFecha);
-      bkOkBtn.addEventListener('click', finalizar);
+      const pularSemConfirmar = () => {
+        if (jaFechou) return;
+        jaFechou = true;
+        bkOkBtn.removeEventListener('click', confirmarClick);
+        fecharVisual();
+        resolveOuter(outcome);
+      };
+      bkFecharSemConfirmar = pularSemConfirmar;
+      bkOkBtn.addEventListener('click', confirmarClick);
     })();
   });
 }
@@ -1675,10 +1683,6 @@ async function submitBooking(){
   const name = document.getElementById('clientName').value.trim();
   const phone = document.getElementById('clientPhone').value.trim();
   if (!name || !phone){ showToast('Preencha seu nome e WhatsApp.'); return; }
-
-  // abre a aba em branco JÁ (ainda dentro do clique síncrono do usuário), pra o
-  // navegador não bloquear como pop-up depois que o efeito visual terminar
-  const waWindow = window.open('', '_blank');
 
   const t = cartTotals();
   const startM = toMin(selSlot);
@@ -1706,11 +1710,54 @@ async function submitBooking(){
     return { status: saveResult };
   })();
 
-  const outcome = await tocarAnimacaoAgendamento(nomeServicoEfeito, workPromise);
+  // só roda quando o cliente clica em "Confirmar no WhatsApp" na tela de sucesso —
+  // isso é um clique real, então window.open não corre risco de ser bloqueado
+  const onConfirmarWhats = () => {
+    const [y,m,d] = selDate.split('-').map(Number);
+    const dateObj = new Date(y, m-1, d);
+    const dateLabel = WDAYS[dateObj.getDay()] + ' ' + String(d).padStart(2,'0') + '/' + String(m).padStart(2,'0');
+
+    const lines = [];
+    lines.push('*AGENDAMENTO — ' + BRAND.name + '*');
+    lines.push('');
+    lines.push('*Cliente:* ' + name);
+    lines.push('*WhatsApp:* ' + phone);
+    lines.push('*Data:* ' + dateLabel + ' às ' + selSlot);
+    lines.push('*Profissional:* ' + BRAND.barber);
+    lines.push('');
+    lines.push('*Serviços:*');
+    cart.forEach(l => {
+      const s = findSvc(l.svcId);
+      lines.push('• ' + l.qty + 'x ' + s.name + ' — ' + formatBRL(s.price) + ' (' + s.min + 'min)');
+      if (l.obs) lines.push('   _' + l.obs + '_');
+    });
+    lines.push('');
+    lines.push('*Duração estimada:* ' + fmtDuration(t.totalMin));
+    if (t.discount > 0) lines.push('*Desconto:* ' + coupon + ' (-' + formatBRL(t.discount) + ')');
+    lines.push('*Total estimado:* ' + formatBRL(t.total));
+    lines.push('*Pagamento:* no local (' + payment + ')');
+    lines.push('');
+    lines.push('_Confirmar no WhatsApp · agendamento feito pelo site_');
+
+    const msg = lines.join('\n');
+    const url = 'https://wa.me/' + BRAND.phone + '?text=' + encodeURIComponent(msg);
+
+    localStorage.setItem('gomesLastBooking', JSON.stringify({ items: cart.map(l => ({svcId:l.svcId, qty:l.qty, obs:l.obs})), ts: Date.now() }));
+    try {
+      const bk = JSON.parse(localStorage.getItem('gomesBookedSlots') || '{}');
+      if (!bk[selDate]) bk[selDate] = [];
+      bk[selDate].push({ start: startM, end: endM });
+      localStorage.setItem('gomesBookedSlots', JSON.stringify(bk));
+    } catch(e){}
+
+    window.open(url, '_blank');
+    showToast('Abrindo WhatsApp para confirmar...');
+  };
+
+  const outcome = await tocarAnimacaoAgendamento(nomeServicoEfeito, workPromise, onConfirmarWhats);
   submitBtn.disabled = false;
 
   if (outcome.status === 'conflict'){
-    if (waWindow) waWindow.close();
     showToast('Esse horário acabou de ser reservado por outra pessoa. Escolha outro.');
     selSlot = null;
     renderSlots(true);
@@ -1720,51 +1767,9 @@ async function submitBooking(){
   if (outcome.status === 'ok'){
     if (!occupiedCache[selDate] || occupiedCache[selDate] === null) occupiedCache[selDate] = [];
     occupiedCache[selDate].push({ start: startM, end: endM });
-  } else {
+  } else if (outcome.status === 'error'){
     showToast('Sem conexão com o servidor — o horário foi reservado só neste aparelho.');
   }
-
-  const [y,m,d] = selDate.split('-').map(Number);
-  const dateObj = new Date(y, m-1, d);
-  const dateLabel = WDAYS[dateObj.getDay()] + ' ' + String(d).padStart(2,'0') + '/' + String(m).padStart(2,'0');
-
-  const lines = [];
-  lines.push('*AGENDAMENTO — ' + BRAND.name + '*');
-  lines.push('');
-  lines.push('*Cliente:* ' + name);
-  lines.push('*WhatsApp:* ' + phone);
-  lines.push('*Data:* ' + dateLabel + ' às ' + selSlot);
-  lines.push('*Profissional:* ' + BRAND.barber);
-  lines.push('');
-  lines.push('*Serviços:*');
-  cart.forEach(l => {
-    const s = findSvc(l.svcId);
-    lines.push('• ' + l.qty + 'x ' + s.name + ' — ' + formatBRL(s.price) + ' (' + s.min + 'min)');
-    if (l.obs) lines.push('   _' + l.obs + '_');
-  });
-  lines.push('');
-  lines.push('*Duração estimada:* ' + fmtDuration(t.totalMin));
-  if (t.discount > 0) lines.push('*Desconto:* ' + coupon + ' (-' + formatBRL(t.discount) + ')');
-  lines.push('*Total estimado:* ' + formatBRL(t.total));
-  lines.push('*Pagamento:* no local (' + payment + ')');
-  lines.push('');
-  lines.push('_Confirmar no WhatsApp · agendamento feito pelo site_');
-
-  const msg = lines.join('\n');
-  const url = 'https://wa.me/' + BRAND.phone + '?text=' + encodeURIComponent(msg);
-
-  // rascunho local: cliente + último agendamento (pro botão "repetir") + fallback offline
-  localStorage.setItem('gomesLastBooking', JSON.stringify({ items: cart.map(l => ({svcId:l.svcId, qty:l.qty, obs:l.obs})), ts: Date.now() }));
-  try {
-    const bk = JSON.parse(localStorage.getItem('gomesBookedSlots') || '{}');
-    if (!bk[selDate]) bk[selDate] = [];
-    bk[selDate].push({ start: startM, end: endM });
-    localStorage.setItem('gomesBookedSlots', JSON.stringify(bk));
-  } catch(e){}
-
-  if (waWindow) waWindow.location.href = url;
-  else window.open(url, '_blank');
-  showToast('Abrindo WhatsApp para confirmar...');
 }
 
 /* ============================================================
