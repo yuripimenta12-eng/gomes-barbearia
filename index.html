@@ -313,6 +313,73 @@ textarea.field-input{resize:vertical;min-height:64px;line-height:1.5}
 #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--gold);color:var(--black);padding:10px 20px;border-radius:24px;font-size:12px;font-weight:700;letter-spacing:.3px;z-index:120;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;box-shadow:0 6px 18px rgba(0,0,0,.4)}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+/* ============================================================
+   EFEITO — confirmação de agendamento (antes do WhatsApp)
+   ============================================================ */
+#booking-overlay{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 50% 40%,#161109 0%,#050504 75%);
+  opacity:0;pointer-events:none;transition:opacity .35s ease}
+#booking-overlay.ativo{opacity:1;pointer-events:auto}
+
+#booking-loading{display:flex;flex-direction:column;align-items:center;gap:22px;padding:24px;width:100%;max-width:320px}
+#booking-servico{font-family:'Cinzel',serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);opacity:0;text-align:center;min-height:16px}
+#booking-loading.escondendo #booking-servico,
+#booking-loading.escondendo #scissors-row,
+#booking-loading.escondendo #booking-status{opacity:0;transform:translateY(-6px);transition:opacity .3s ease,transform .3s ease;pointer-events:none}
+
+#scissors-row{display:flex;gap:10px;justify-content:center;min-height:44px}
+.scissor-item{opacity:0;transform:translateY(14px) scale(.55) rotate(-12deg);transition:opacity .38s cubic-bezier(.34,1.56,.64,1),transform .46s cubic-bezier(.34,1.56,.64,1)}
+.scissor-item.visivel{opacity:1;transform:translateY(0) scale(1) rotate(0deg)}
+@keyframes tesouraOnda{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-9px) rotate(-8deg)}}
+.scissor-item.ondulando{animation:tesouraOnda 1.05s ease-in-out infinite}
+.scissor-item:nth-child(1).ondulando{animation-delay:0s}
+.scissor-item:nth-child(2).ondulando{animation-delay:.09s}
+.scissor-item:nth-child(3).ondulando{animation-delay:.18s}
+.scissor-item:nth-child(4).ondulando{animation-delay:.27s}
+.scissor-item:nth-child(5).ondulando{animation-delay:.36s}
+.scissor-item:nth-child(6).ondulando{animation-delay:.45s}
+
+#orbit-wrap{position:relative;width:1px;height:1px;display:flex;align-items:center;justify-content:center}
+#orbit-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;
+  border:1px solid rgba(225,188,134,.18);opacity:0;transition:opacity .4s ease}
+#orbit-shimmer{top:50%;left:50%}
+@keyframes girarShimmer{to{transform:translate(-50%,-50%) rotate(360deg)}}
+#orbit-shimmer.girando{animation:girarShimmer 1.1s linear infinite}
+#orbit-hub{position:absolute;top:50%;left:50%;width:0;height:0}
+.orbit-floater{position:absolute;top:-22px;left:-22px;width:44px;height:44px}
+
+#booking-status{font-size:12.5px;color:var(--muted);letter-spacing:.4px;text-align:center;opacity:1;transition:opacity .21s ease;min-height:18px}
+
+#booking-confirm{display:flex;flex-direction:column;align-items:center;gap:6px;padding:24px;opacity:0;pointer-events:none;transform:scale(.94);transition:opacity .25s ease,transform .25s ease}
+#booking-overlay.confirmado #booking-loading{display:none}
+#booking-confirm.mostrando{opacity:1;pointer-events:auto;transform:scale(1)}
+
+#confirm-squircle{width:84px;height:84px;border-radius:28%;
+  background:linear-gradient(135deg,var(--bronze),var(--gold-light) 55%,var(--bronze));
+  display:flex;align-items:center;justify-content:center;
+  transform:scale(0) rotate(-20deg);opacity:0;margin-bottom:6px;
+  box-shadow:0 8px 30px rgba(225,188,134,.25)}
+#confirm-squircle.entrar{transition:transform .5s cubic-bezier(.34,1.56,.64,1),opacity .3s ease;transform:scale(1) rotate(0deg);opacity:1}
+@keyframes squircleBrilho{0%,100%{box-shadow:0 8px 30px rgba(225,188,134,.25)}50%{box-shadow:0 8px 44px rgba(225,188,134,.6)}}
+#confirm-squircle.brilhando{animation:squircleBrilho 1.6s ease-in-out infinite}
+#confirm-check{width:38px;height:38px}
+#confirm-check .check-path{stroke-dasharray:46;stroke-dashoffset:46}
+#confirm-check.desenhar .check-path{transition:stroke-dashoffset .5s cubic-bezier(.65,0,.35,1);stroke-dashoffset:0}
+
+#confirm-textos{text-align:center;opacity:0;transition:opacity .2s ease}
+#confirm-textos.aparecer{opacity:1}
+#confirm-titulo{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--gold);letter-spacing:2px;margin-bottom:6px}
+#confirm-titulo .letra{display:inline-block;opacity:0;transform:translateY(8px) scale(.7)}
+#confirm-sub{font-size:12.5px;color:var(--muted);line-height:1.6;max-width:260px}
+
+#confirm-btn-ok{margin-top:18px;display:flex;align-items:center;gap:8px;padding:13px 24px;border:none;border-radius:8px;
+  background:linear-gradient(135deg,var(--bronze),var(--gold-light),var(--bronze));color:var(--black);
+  font-family:'Cinzel',serif;font-size:11.5px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;cursor:pointer;
+  opacity:0;transform:translateY(8px);transition:opacity .25s ease,transform .25s ease}
+#confirm-btn-ok.aparecer{opacity:1;transform:translateY(0)}
+@keyframes pulsarBtn{0%,100%{box-shadow:0 0 0 0 rgba(225,188,134,.5)}50%{box-shadow:0 0 0 8px rgba(225,188,134,0)}}
+#confirm-btn-ok.pulsando{animation:pulsarBtn 1.5s ease-in-out infinite}
+
 /* ============ ADMIN ============ */
 .admin-note{font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:14px;background:var(--black);border:1px solid var(--border);border-radius:6px;padding:10px 12px}
 .admin-status-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
@@ -569,6 +636,52 @@ textarea.field-input{resize:vertical;min-height:64px;line-height:1.5}
 </div>
 
 <div id="toast"></div>
+
+<!-- Gradiente dourado compartilhado pelo efeito de agendamento -->
+<svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+  <defs>
+    <linearGradient id="ouro" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#84633D"/>
+      <stop offset="45%" stop-color="#E1BC86"/>
+      <stop offset="55%" stop-color="#F4D8AA"/>
+      <stop offset="100%" stop-color="#84633D"/>
+    </linearGradient>
+    <linearGradient id="ouro-lamina" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#CEA26B"/>
+      <stop offset="50%" stop-color="#F4D8AA"/>
+      <stop offset="100%" stop-color="#CEA26B"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- Overlay do efeito de confirmação de agendamento -->
+<div id="booking-overlay" role="dialog" aria-modal="true" aria-label="Confirmando agendamento">
+  <div id="booking-loading">
+    <div id="booking-servico"></div>
+    <div id="scissors-row"></div>
+    <div id="orbit-wrap">
+      <div id="orbit-ring"></div>
+      <div id="orbit-shimmer"></div>
+      <div id="orbit-hub"></div>
+    </div>
+    <div id="booking-status"></div>
+  </div>
+  <div id="booking-confirm">
+    <div id="confirm-squircle">
+      <svg id="confirm-check" viewBox="0 0 52 52" fill="none">
+        <path class="check-path" d="M14 27 L22 35 L39 16" stroke="#090908" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div id="confirm-textos">
+      <div id="confirm-titulo">Agendado!</div>
+      <div id="confirm-sub">Você será direcionado ao WhatsApp pra confirmar</div>
+    </div>
+    <button id="confirm-btn-ok" type="button">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.4 0-.5C10 9 9.4 7.6 9.1 7c-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2.1 3.2 5 4.4.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3ZM12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2Z"/></svg>
+      Ir para o WhatsApp
+    </button>
+  </div>
+</div>
 
 <script>
 /* ============================================================
@@ -1133,6 +1246,427 @@ function repeatLast(){
 }
 
 /* ============================================================
+   EFEITO — confirmação de agendamento (tesouras + órbita + check)
+   ============================================================ */
+const BK_CFG = {
+  qtd:          6,
+  staggerIn:    90,
+  duracaoOnda:  2400,
+  orbitaRaio:   90,
+  spinDeg:      450,
+  spinMs:       960,
+  screwMs:      440,
+  delayFecha:   3200,
+};
+const BK_STATUS_MSGS = ['Verificando disponibilidade', 'Reservando horário', 'Quase lá', 'Confirmando'];
+
+const bkOverlay   = document.getElementById('booking-overlay');
+const bkLoadingEl = document.getElementById('booking-loading');
+const bkScRow     = document.getElementById('scissors-row');
+const bkStatusEl  = document.getElementById('booking-status');
+const bkConfirmEl = document.getElementById('booking-confirm');
+const bkOkBtn     = document.getElementById('confirm-btn-ok');
+const bkServicoEl = document.getElementById('booking-servico');
+const bkOrbitHub  = document.getElementById('orbit-hub');
+const bkOrbitRing = document.getElementById('orbit-ring');
+const bkOrbitShim = document.getElementById('orbit-shimmer');
+const bkSquircle  = document.getElementById('confirm-squircle');
+const bkCheckSvg  = document.getElementById('confirm-check');
+const bkTextosEl  = document.getElementById('confirm-textos');
+const bkTituloEl  = document.getElementById('confirm-titulo');
+
+const bkRingD = BK_CFG.orbitaRaio * 2 + 50;
+bkOrbitRing.style.cssText += `width:${bkRingD}px;height:${bkRingD}px;`;
+bkOrbitShim.style.cssText = `
+  position:absolute;width:${bkRingD}px;height:${bkRingD}px;
+  border-radius:50%;transform:translate(-50%,-50%);
+  background:conic-gradient(from 0deg,transparent 0deg,
+    rgba(201,168,76,0) 0deg,rgba(201,168,76,.7) 35deg,
+    rgba(232,201,106,1) 45deg,rgba(201,168,76,.7) 55deg,transparent 90deg);
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#fff calc(100% - 2px),#fff 100%,transparent);
+  mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#fff calc(100% - 2px),#fff 100%,transparent);
+  opacity:0;transition:opacity .4s ease;
+`;
+
+function bkSvgTesoura(w=44,h=44){
+  return `<svg viewBox="0 0 44 44" width="${w}" height="${h}" fill="none"
+               xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <g class="blade-top">
+      <ellipse cx="8" cy="8.5" rx="5.8" ry="6.3" stroke="url(#ouro)" stroke-width="1.75"/>
+      <ellipse cx="8" cy="8.5" rx="2.3" ry="2.5" stroke="url(#ouro)" stroke-width="1.1" opacity=".52"/>
+      <path d="M10.8 14.2 Q12 18 10.5 19.8" stroke="url(#ouro)" stroke-width="1.35" stroke-linecap="round" opacity=".65"/>
+      <path d="M13.5 10.8 C18 14.5 24 18.5 30 22 L43 13" stroke="url(#ouro-lamina)" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M17 12.8 C22 16 27 19.5 30 22" stroke="rgba(245,224,144,.55)" stroke-width=".7" stroke-linecap="round"/>
+    </g>
+    <g class="blade-bottom">
+      <ellipse cx="8" cy="35.5" rx="5.8" ry="6.3" stroke="url(#ouro)" stroke-width="1.75"/>
+      <ellipse cx="8" cy="35.5" rx="2.3" ry="2.5" stroke="url(#ouro)" stroke-width="1.1" opacity=".52"/>
+      <path d="M10.8 29.8 Q12 26 10.5 24.2" stroke="url(#ouro)" stroke-width="1.35" stroke-linecap="round" opacity=".65"/>
+      <path d="M13.5 33.2 C18 29.5 24 25.5 30 22 L43 31" stroke="url(#ouro-lamina)" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M17 31.2 C22 28 27 24.5 30 22" stroke="rgba(245,224,144,.55)" stroke-width=".7" stroke-linecap="round"/>
+    </g>
+    <circle cx="30" cy="22" r="3.4" fill="url(#ouro)"/>
+    <circle cx="30" cy="22" r="1.6" fill="#0a0a0a" opacity=".65"/>
+    <circle cx="29" cy="21" r=".5" fill="rgba(255,240,180,.6)"/>
+  </svg>`;
+}
+
+const bkEioq = t => t<.5 ? 8*t*t*t*t : 1-Math.pow(-2*t+2,4)/2;
+const bkEioc = t => t<.5 ? 4*t*t*t   : 1-Math.pow(-2*t+2,3)/2;
+const bkEib  = t => { const c1=1.70158,c3=c1+1; return c3*t*t*t-c1*t*t; };
+const bkEo3  = t => 1-Math.pow(1-t,3);
+const bkEsperar = ms => new Promise(r=>setTimeout(r,ms));
+function bkQBez(p0,p1,p2,t){
+  const mt=1-t;
+  return { x: mt*mt*p0.x + 2*mt*t*p1.x + t*t*p2.x, y: mt*mt*p0.y + 2*mt*t*p1.y + t*t*p2.y };
+}
+
+function bkCriarTesouras(){
+  bkScRow.innerHTML='';
+  return Array.from({length:BK_CFG.qtd},()=>{
+    const el=document.createElement('div');
+    el.className='scissor-item';
+    el.innerHTML=bkSvgTesoura();
+    bkScRow.appendChild(el);
+    return el;
+  });
+}
+
+async function bkSetStatus(txt){
+  bkStatusEl.style.opacity='0';
+  await bkEsperar(210);
+  bkStatusEl.textContent=txt;
+  bkStatusEl.style.opacity='1';
+}
+
+function bkAnimarLetras(el){
+  const texto=el.textContent;
+  el.innerHTML='';
+  [...texto].forEach((c,i)=>{
+    const sp=document.createElement('span');
+    sp.className='letra';
+    sp.textContent=c===' '?' ':c;
+    sp.style.transition=`opacity .28s ease ${i*.038}s, transform .34s cubic-bezier(.34,1.56,.64,1) ${i*.038}s`;
+    el.appendChild(sp);
+  });
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    el.querySelectorAll('.letra').forEach(sp=>{
+      sp.style.opacity='1';
+      sp.style.transform='translateY(0) scale(1)';
+    });
+  }));
+}
+
+function bkAnimarLetrasServico(el){
+  const texto = el.textContent.trim();
+  if(!texto) return;
+  el.innerHTML = '';
+  el.style.opacity = '1';
+  [...texto].forEach((c, i) => {
+    const sp = document.createElement('span');
+    sp.className = 'letra';
+    sp.textContent = c === ' ' ? ' ' : c;
+    sp.style.cssText = `display:inline-block;opacity:0;transform:translateY(10px) scale(.85);
+      transition:opacity .22s ease ${i*.05}s, transform .30s cubic-bezier(.34,1.4,.64,1) ${i*.05}s;`;
+    el.appendChild(sp);
+  });
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    el.querySelectorAll('.letra').forEach(sp=>{
+      sp.style.opacity = '1';
+      sp.style.transform = 'translateY(0) scale(1)';
+    });
+  }));
+}
+
+function bkDispararParticulas(){
+  const r  = bkSquircle.getBoundingClientRect();
+  const cx = r.left+r.width/2, cy = r.top+r.height/2;
+  const N = 20;
+  for(let i=0;i<N;i++){
+    const el   = document.createElement('div');
+    const ang  = (i/N)*360 + Math.random()*10;
+    const dist = 55 + Math.random()*70;
+    const size = 2 + Math.random()*4;
+    const hue  = 138 + Math.random()*28;
+    el.style.cssText=`position:fixed;width:${size}px;height:${size}px;
+      border-radius:50%;background:hsl(${hue}deg 85% 62%);
+      top:${cy}px;left:${cx}px;transform:translate(-50%,-50%);
+      pointer-events:none;z-index:310;
+      box-shadow:0 0 ${size*2.5}px hsl(${hue}deg 85% 62%);`;
+    document.body.appendChild(el);
+    const rad=ang*Math.PI/180;
+    el.animate([
+      {transform:'translate(-50%,-50%) scale(1)',opacity:1},
+      {transform:`translate(calc(-50% + ${Math.cos(rad)*dist}px),calc(-50% + ${Math.sin(rad)*dist}px)) scale(0)`,opacity:0}
+    ],{duration:500+Math.random()*300,delay:i*14+Math.random()*20,
+       easing:'cubic-bezier(0,0,.2,1)',fill:'forwards'})
+    .onfinish=()=>el.remove();
+  }
+}
+
+function bkFlashVerde(){
+  const fl=document.createElement('div');
+  fl.style.cssText=`position:fixed;inset:0;
+    background:radial-gradient(ellipse 50% 40% at 50% 50%,rgba(57,217,138,.18) 0%,transparent 70%);
+    pointer-events:none;z-index:305;`;
+  document.body.appendChild(fl);
+  fl.animate([{opacity:1},{opacity:0}],{duration:700,easing:'ease-out',fill:'forwards'})
+    .onfinish=()=>fl.remove();
+}
+function bkFlashDourado(){
+  const fl=document.createElement('div');
+  fl.style.cssText=`position:fixed;inset:0;
+    background:radial-gradient(circle 130px at 50% 50%,rgba(201,168,76,.55) 0%,transparent 65%);
+    pointer-events:none;z-index:305;`;
+  document.body.appendChild(fl);
+  fl.animate([{opacity:0},{opacity:1,offset:.2},{opacity:0}],{duration:480,easing:'ease-out',fill:'forwards'})
+    .onfinish=()=>fl.remove();
+}
+
+async function bkFaseOrbita(tesouras){
+  const hub=bkOrbitHub.getBoundingClientRect();
+  const hx=hub.left, hy=hub.top;
+  const offs=tesouras.map(t=>{
+    const r=t.getBoundingClientRect();
+    return {x:r.left+r.width/2-hx, y:r.top+r.height/2-hy};
+  });
+  const fls=offs.map((o)=>{
+    const el=document.createElement('div');
+    el.className='orbit-floater';
+    el.innerHTML=bkSvgTesoura();
+    el.style.cssText+=`opacity:0;transform:translate(${o.x}px,${o.y}px);`;
+    bkOrbitHub.appendChild(el);
+    return el;
+  });
+
+  bkLoadingEl.classList.add('escondendo');
+  await bkEsperar(55);
+  fls.forEach(el=>{el.style.transition='opacity .18s ease';el.style.opacity='1';});
+  await bkEsperar(190);
+
+  bkOrbitRing.style.opacity='1';
+  bkOrbitShim.style.opacity='1';
+  bkOrbitShim.classList.add('girando');
+
+  const base = Array.from({length:BK_CFG.qtd},(_,i)=> -90+i*(360/BK_CFG.qtd));
+  const targets = base.map(a=>({ x: Math.cos(a*Math.PI/180)*BK_CFG.orbitaRaio, y: Math.sin(a*Math.PI/180)*BK_CFG.orbitaRaio }));
+  const controls = offs.map((s,i)=>({ x: (s.x+targets[i].x)/2, y: Math.min(s.y,targets[i].y) - 80 }));
+  const CURL_DUR = 680;
+
+  const curlPromises = fls.map((el,i)=>new Promise(res=>{
+    const delay=i*52;
+    const t0=performance.now();
+    function frame(now){
+      const elapsed=now-t0-delay;
+      if(elapsed<0){ requestAnimationFrame(frame); return; }
+      const p =Math.min(elapsed/CURL_DUR,1);
+      const ep=bkEioc(p);
+      const pos=bkQBez(offs[i],controls[i],targets[i],ep);
+      const sc=1+Math.sin(p*Math.PI)*.13;
+      el.style.transition='none';
+      el.style.transform=`translate(${pos.x}px,${pos.y}px) scale(${sc})`;
+      if(p<1) requestAnimationFrame(frame); else res();
+    }
+    requestAnimationFrame(frame);
+  }));
+  await Promise.all(curlPromises);
+  await bkEsperar(60);
+
+  const TRAIL_N = 5;
+  const trailDots = fls.map(()=>
+    Array.from({length:TRAIL_N},()=>{
+      const d=document.createElement('div');
+      d.style.cssText=`position:absolute;top:-3px;left:-3px;width:6px;height:6px;border-radius:50%;
+        background:radial-gradient(circle,rgba(232,201,106,.98) 0%,rgba(201,168,76,.3) 100%);
+        pointer-events:none;opacity:0;will-change:transform,opacity;`;
+      bkOrbitHub.appendChild(d);
+      return d;
+    })
+  );
+  const posHist = fls.map(()=>[]);
+  let curAngles = [...base];
+  await new Promise(res=>{
+    const t0=performance.now();
+    function frame(now){
+      const p  =Math.min((now-t0)/BK_CFG.spinMs,1);
+      const ep =bkEioq(p);
+      const add=ep*BK_CFG.spinDeg;
+      fls.forEach((el,i)=>{
+        const deg=curAngles[i]+add;
+        const rad=deg*Math.PI/180;
+        const tx =Math.cos(rad)*BK_CFG.orbitaRaio;
+        const ty =Math.sin(rad)*BK_CFG.orbitaRaio;
+        const selfDeg=ep*BK_CFG.spinDeg*.55;
+        el.style.transition='none';
+        el.style.transform=`translate(${tx}px,${ty}px) rotate(${selfDeg}deg)`;
+        posHist[i].unshift({x:tx,y:ty});
+        if(posHist[i].length>TRAIL_N+1) posHist[i].pop();
+        trailDots[i].forEach((dot,k)=>{
+          const h=posHist[i][k+1];
+          if(h){
+            dot.style.opacity=String((TRAIL_N-k)/(TRAIL_N*1.35));
+            dot.style.transform=`translate(${h.x}px,${h.y}px) scale(${(TRAIL_N-k)/TRAIL_N})`;
+          } else { dot.style.opacity='0'; }
+        });
+      });
+      if(p<1) requestAnimationFrame(frame);
+      else{ curAngles=curAngles.map(a=>a+BK_CFG.spinDeg); res(); }
+    }
+    requestAnimationFrame(frame);
+  });
+  trailDots.flat().forEach(d=>d.remove());
+  await bkEsperar(50);
+
+  const snap=[...curAngles];
+  const spinFinal=BK_CFG.spinDeg*.55;
+  await new Promise(res=>{
+    const t0=performance.now();
+    function frame(now){
+      const p =Math.min((now-t0)/BK_CFG.screwMs,1);
+      const ep=bkEib(p);
+      const fp=bkEo3(p);
+      fls.forEach((el,i)=>{
+        const deg=snap[i]+ep*210;
+        const rad=deg*Math.PI/180;
+        const r  =BK_CFG.orbitaRaio*(1-ep);
+        const tx =Math.cos(rad)*r;
+        const ty =Math.sin(rad)*r;
+        const sc =Math.max(0,1-ep*.88);
+        const op =Math.max(0,1-fp*1.7);
+        const selfDeg=spinFinal+ep*130;
+        el.style.transition='none';
+        el.style.transform=`translate(${tx}px,${ty}px) scale(${sc}) rotate(${selfDeg}deg)`;
+        el.style.opacity=String(op);
+      });
+      if(p<1) requestAnimationFrame(frame); else res();
+    }
+    requestAnimationFrame(frame);
+  });
+
+  bkFlashDourado();
+  fls.forEach(el=>el.remove());
+  bkOrbitRing.style.opacity='0';
+  bkOrbitShim.style.opacity='0';
+  bkOrbitShim.classList.remove('girando');
+}
+
+function bkResetVisual(){
+  bkConfirmEl.classList.remove('mostrando');
+  bkLoadingEl.classList.remove('escondendo');
+  bkSquircle.classList.remove('entrar','brilhando');
+  bkCheckSvg.classList.remove('desenhar');
+  bkTextosEl.classList.remove('aparecer');
+  bkOkBtn.classList.remove('aparecer','pulsando');
+  bkStatusEl.style.opacity='1';
+  bkStatusEl.textContent=BK_STATUS_MSGS[0];
+  bkServicoEl.innerHTML='';
+  bkServicoEl.style.opacity='0';
+  const cdLine=document.getElementById('cd-line');
+  if(cdLine) cdLine.remove();
+}
+
+/* Toca a animação em paralelo com a checagem/gravação real (workPromise),
+   e só mostra o "check" de confirmado se workPromise resolver com sucesso. */
+function tocarAnimacaoAgendamento(nomeServico, workPromise){
+  return new Promise((resolveOuter) => {
+    (async () => {
+      bkOverlay.classList.remove('confirmado');
+      bkResetVisual();
+      bkServicoEl.textContent = nomeServico || '';
+      bkOverlay.classList.add('ativo');
+      if(nomeServico) setTimeout(()=>bkAnimarLetrasServico(bkServicoEl), 130);
+
+      const tesouras=bkCriarTesouras();
+      await bkEsperar(220);
+      tesouras.forEach((t,i)=>setTimeout(()=>t.classList.add('visivel'), i*BK_CFG.staggerIn));
+      await bkEsperar(tesouras.length*BK_CFG.staggerIn + 60);
+      tesouras.forEach(t=>t.classList.add('ondulando'));
+
+      const msgInterval = BK_CFG.duracaoOnda / BK_STATUS_MSGS.length;
+      let msgIdx = 1, msgBusy = false;
+      const cycleId = setInterval(async ()=>{
+        if(msgBusy || msgIdx >= BK_STATUS_MSGS.length - 1) return;
+        msgBusy = true;
+        await bkSetStatus(BK_STATUS_MSGS[msgIdx++]);
+        msgBusy = false;
+      }, msgInterval);
+
+      // espera o maior entre a onda mínima (ritmo visual) e o trabalho real (rede)
+      const outcome = await Promise.all([bkEsperar(BK_CFG.duracaoOnda), workPromise]).then(r => r[1]);
+
+      clearInterval(cycleId);
+      tesouras.forEach(t=>t.classList.remove('ondulando'));
+      await bkSetStatus(BK_STATUS_MSGS[BK_STATUS_MSGS.length-1]);
+      await bkEsperar(100);
+
+      await bkFaseOrbita(tesouras);
+      await bkEsperar(120);
+
+      if (outcome.status === 'conflict'){
+        // sem check verde — fecha e deixa o chamador tratar o conflito
+        bkOverlay.classList.remove('ativo');
+        setTimeout(bkResetVisual, 380);
+        resolveOuter(outcome);
+        return;
+      }
+
+      bkStatusEl.style.opacity='0';
+      bkOverlay.classList.add('confirmado');
+      bkConfirmEl.classList.add('mostrando');
+      await bkEsperar(30);
+
+      bkFlashVerde();
+      bkDispararParticulas();
+      bkSquircle.classList.add('entrar');
+      await bkEsperar(220);
+      bkSquircle.classList.add('brilhando');
+      await bkEsperar(80);
+      bkCheckSvg.classList.add('desenhar');
+      await bkEsperar(200);
+      bkTextosEl.classList.add('aparecer');
+      bkAnimarLetras(bkTituloEl);
+      await bkEsperar(380);
+      bkOkBtn.classList.add('aparecer','pulsando');
+      bkOkBtn.focus();
+
+      const cdLine=document.createElement('div');
+      cdLine.id='cd-line';
+      cdLine.style.cssText=`height:2px;border-radius:1px;width:56px;
+        background:linear-gradient(90deg,var(--gold-light),var(--gold));
+        transform-origin:left center;will-change:transform;margin-top:10px;`;
+      bkConfirmEl.appendChild(cdLine);
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        cdLine.style.transition=`transform ${BK_CFG.delayFecha}ms linear`;
+        cdLine.style.transform='scaleX(0)';
+      }));
+
+      let jaFechou = false;
+      const finalizar = () => {
+        if (jaFechou) return;
+        jaFechou = true;
+        clearTimeout(autoTimer);
+        bkOkBtn.removeEventListener('click', finalizar);
+        bkSquircle.style.transition='transform .22s cubic-bezier(.5,0,1,.6),opacity .18s ease';
+        bkSquircle.style.transform='scale(.8) rotate(8deg)';
+        bkSquircle.style.opacity='0';
+        bkTextosEl.style.transition='opacity .16s ease,transform .16s ease';
+        bkTextosEl.style.opacity='0';
+        bkTextosEl.style.transform='translateY(-6px)';
+        bkOkBtn.style.transition='opacity .14s ease';
+        bkOkBtn.style.opacity='0';
+        setTimeout(()=>{
+          bkOverlay.classList.remove('ativo','confirmado');
+          setTimeout(bkResetVisual, 380);
+        }, 200);
+        resolveOuter(outcome);
+      };
+      const autoTimer = setTimeout(finalizar, BK_CFG.delayFecha);
+      bkOkBtn.addEventListener('click', finalizar);
+    })();
+  });
+}
+
+/* ============================================================
    ENVIO — WHATSAPP
    ============================================================ */
 async function submitBooking(){
@@ -1142,25 +1676,52 @@ async function submitBooking(){
   const phone = document.getElementById('clientPhone').value.trim();
   if (!name || !phone){ showToast('Preencha seu nome e WhatsApp.'); return; }
 
+  // abre a aba em branco JÁ (ainda dentro do clique síncrono do usuário), pra o
+  // navegador não bloquear como pop-up depois que o efeito visual terminar
+  const waWindow = window.open('', '_blank');
+
   const t = cartTotals();
   const startM = toMin(selSlot);
   const endM = startM + (t.totalMin || 30);
-
-  // última checagem, em tempo real, pra evitar 2 clientes no mesmo horário
   const submitBtn = document.getElementById('submitBtn');
   submitBtn.disabled = true;
-  const freshOccupied = await fetchOccupied(selDate);
-  submitBtn.disabled = false;
-  if (freshOccupied !== null){
-    occupiedCache[selDate] = freshOccupied;
-    const conflict = freshOccupied.some(b => startM < b.end && endM > b.start);
-    if (conflict){
-      showToast('Esse horário acabou de ser reservado por outra pessoa. Escolha outro.');
-      selSlot = null;
-      renderSlots(true);
-      renderSummary();
-      return;
+
+  // nome pro rótulo do efeito: primeiro serviço + quantos a mais
+  const primeiroSvc = findSvc(cart[0].svcId);
+  const nomeServicoEfeito = primeiroSvc.name + (cart.length > 1 ? ' +' + (cart.length - 1) : '');
+
+  // roda a checagem de conflito + gravação real no banco EM PARALELO com o efeito visual
+  const workPromise = (async () => {
+    const freshOccupied = await fetchOccupied(selDate);
+    if (freshOccupied !== null){
+      occupiedCache[selDate] = freshOccupied;
+      const conflict = freshOccupied.some(b => startM < b.end && endM > b.start);
+      if (conflict) return { status: 'conflict' };
     }
+    const saveResult = await insertBooking({
+      appt_date: selDate, start_min: startM, end_min: endM,
+      services: cart.map(l => ({ id: l.svcId, name: findSvc(l.svcId).name, qty: l.qty, obs: l.obs || null })),
+      client_name: name, client_phone: phone, payment: payment, coupon: coupon || null
+    });
+    return { status: saveResult };
+  })();
+
+  const outcome = await tocarAnimacaoAgendamento(nomeServicoEfeito, workPromise);
+  submitBtn.disabled = false;
+
+  if (outcome.status === 'conflict'){
+    if (waWindow) waWindow.close();
+    showToast('Esse horário acabou de ser reservado por outra pessoa. Escolha outro.');
+    selSlot = null;
+    renderSlots(true);
+    renderSummary();
+    return;
+  }
+  if (outcome.status === 'ok'){
+    if (!occupiedCache[selDate] || occupiedCache[selDate] === null) occupiedCache[selDate] = [];
+    occupiedCache[selDate].push({ start: startM, end: endM });
+  } else {
+    showToast('Sem conexão com o servidor — o horário foi reservado só neste aparelho.');
   }
 
   const [y,m,d] = selDate.split('-').map(Number);
@@ -1192,28 +1753,6 @@ async function submitBooking(){
   const msg = lines.join('\n');
   const url = 'https://wa.me/' + BRAND.phone + '?text=' + encodeURIComponent(msg);
 
-  // grava no banco compartilhado — assim outros clientes já veem esse horário ocupado.
-  // o próprio banco tem uma trava (exclusion constraint) que recusa sobreposição
-  // de verdade, mesmo que 2 pessoas cliquem "confirmar" no mesmíssimo instante.
-  const saveResult = await insertBooking({
-    appt_date: selDate, start_min: startM, end_min: endM,
-    services: cart.map(l => ({ id: l.svcId, name: findSvc(l.svcId).name, qty: l.qty, obs: l.obs || null })),
-    client_name: name, client_phone: phone, payment: payment, coupon: coupon || null
-  });
-  if (saveResult === 'conflict'){
-    showToast('Esse horário acabou de ser reservado por outra pessoa. Escolha outro.');
-    selSlot = null;
-    renderSlots(true);
-    renderSummary();
-    return;
-  }
-  if (saveResult === 'ok'){
-    if (!occupiedCache[selDate] || occupiedCache[selDate] === null) occupiedCache[selDate] = [];
-    occupiedCache[selDate].push({ start: startM, end: endM });
-  } else {
-    showToast('Sem conexão com o servidor — o horário foi reservado só neste aparelho.');
-  }
-
   // rascunho local: cliente + último agendamento (pro botão "repetir") + fallback offline
   localStorage.setItem('gomesLastBooking', JSON.stringify({ items: cart.map(l => ({svcId:l.svcId, qty:l.qty, obs:l.obs})), ts: Date.now() }));
   try {
@@ -1223,7 +1762,8 @@ async function submitBooking(){
     localStorage.setItem('gomesBookedSlots', JSON.stringify(bk));
   } catch(e){}
 
-  window.open(url, '_blank');
+  if (waWindow) waWindow.location.href = url;
+  else window.open(url, '_blank');
   showToast('Abrindo WhatsApp para confirmar...');
 }
 
