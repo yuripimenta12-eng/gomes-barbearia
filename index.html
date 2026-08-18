@@ -117,6 +117,7 @@ input,textarea,select{font-family:inherit}
 .hero{background:var(--black-2);padding:38px 24px 30px;text-align:center;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
 .hero::before,.hero::after{content:'';position:absolute;left:50%;transform:translateX(-50%);width:180px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
 .hero::before{top:0}.hero::after{bottom:0}
+.h-logo{width:92px;height:92px;object-fit:contain;margin:0 auto 12px}
 .h-name{font-size:38px;letter-spacing:5px;color:var(--gold);line-height:1.1;margin-bottom:6px}
 .h-sub{font-family:'Cinzel',serif;font-size:12px;font-weight:600;color:var(--bronze);letter-spacing:3px;text-transform:uppercase;margin-bottom:14px}
 .h-line{width:50px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 16px}
@@ -406,6 +407,7 @@ textarea.field-input{resize:vertical;min-height:64px;line-height:1.5}
 
 @media (min-width:600px){
   .h-name{font-size:46px}
+  .h-logo{width:112px;height:112px}
 }
 </style>
 </head>
@@ -427,6 +429,7 @@ textarea.field-input{resize:vertical;min-height:64px;line-height:1.5}
 </header>
 
 <section class="hero frame">
+  <img class="h-logo" src="logo.png" alt="Gomes Barbearia" width="100" height="100">
   <div class="h-name disp">GOMES BARBEARIA</div>
   <div class="h-sub">Sete de Abril &middot; Salvador</div>
   <div class="h-line"></div>
