@@ -655,6 +655,7 @@ textarea.field-input{resize:vertical;min-height:64px;line-height:1.5}
         </div>
 
         <div id="adminPanelBookings" style="display:none">
+          <div class="date-scroll" id="adminDateScroll"></div>
           <div id="adminBookingsList"></div>
         </div>
       </div>
@@ -1927,8 +1928,11 @@ function fmtBookingDate(ds){
   const dt = new Date(y, m-1, d);
   return WDAYS[dt.getDay()] + ' ' + String(d).padStart(2,'0') + '/' + String(m).padStart(2,'0');
 }
+let adminBookingsCache = [];
+let adminDateFilter = null; // null = mostra todas as datas
 async function loadAdminBookings(){
   const wrap = document.getElementById('adminBookingsList');
+  document.getElementById('adminDateScroll').innerHTML = '';
   wrap.innerHTML = '<div class="admin-note">Carregando agendamentos...</div>';
   try {
     const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/admin_list_bookings', {
@@ -1937,21 +1941,55 @@ async function loadAdminBookings(){
       body: JSON.stringify({ p_pin_hash: adminPinHash })
     });
     if (!res.ok) throw new Error('http ' + res.status);
-    const rows = await res.json();
-    if (!rows.length){ wrap.innerHTML = '<div class="admin-note">Nenhum agendamento a partir de hoje.</div>'; return; }
-    wrap.innerHTML = rows.map(b => {
-      const svcNames = (b.services || []).map(s => (s.qty > 1 ? s.qty + 'x ' : '') + s.name).join(', ');
-      return '<div class="booking-item">' +
-        '<div class="bi-top"><span class="bi-date">' + fmtBookingDate(b.appt_date) + ' · ' + toTime(b.start_min) + '</span>' +
-        '<span class="bi-pay">' + esc(b.payment || '') + '</span></div>' +
-        '<div class="bi-client">' + esc(b.client_name) + ' &middot; ' + esc(b.client_phone) + '</div>' +
-        '<div class="bi-services">' + esc(svcNames) + '</div>' +
-        '<div class="bi-actions"><button class="btn btn-outline btn-sm bi-cancel" onclick="cancelBooking(\'' + b.id + '\')">Cancelar</button></div>' +
-        '</div>';
-    }).join('');
+    adminBookingsCache = await res.json();
+    adminDateFilter = null;
+    renderAdminDateChips();
+    renderAdminBookingsList();
   } catch (e){
     wrap.innerHTML = '<div class="admin-note" style="color:var(--danger)">Não deu pra carregar os agendamentos. Verifique a conexão.</div>';
   }
+}
+function renderAdminDateChips(){
+  const wrap = document.getElementById('adminDateScroll');
+  const dates = [...new Set(adminBookingsCache.map(b => b.appt_date))].sort();
+  if (!dates.length){ wrap.innerHTML = ''; return; }
+  const now = new Date();
+  const todayStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+  let html = '<div class="date-chip' + (adminDateFilter === null ? ' sel' : '') + '" style="min-width:60px" onclick="setAdminDateFilter(null)">' +
+    '<div class="dwd">&nbsp;</div><div class="dnum">Todos</div><div class="dwd">&nbsp;</div></div>';
+  dates.forEach(ds => {
+    const [y,m,d] = ds.split('-').map(Number);
+    const dt = new Date(y, m-1, d);
+    const isToday = ds === todayStr;
+    html += '<div class="date-chip' + (adminDateFilter===ds?' sel':'') + (isToday?' today':'') + '" onclick="setAdminDateFilter(\'' + ds + '\')">' +
+      '<div class="dwd">' + (isToday?'Hoje':WDAYS[dt.getDay()]) + '</div>' +
+      '<div class="dnum">' + d + '</div>' +
+      '<div class="dmo">' + MONTHS[dt.getMonth()] + '</div></div>';
+  });
+  wrap.innerHTML = html;
+}
+function setAdminDateFilter(ds){
+  adminDateFilter = ds;
+  renderAdminDateChips();
+  renderAdminBookingsList();
+}
+function renderAdminBookingsList(){
+  const wrap = document.getElementById('adminBookingsList');
+  const rows = adminDateFilter ? adminBookingsCache.filter(b => b.appt_date === adminDateFilter) : adminBookingsCache;
+  if (!rows.length){
+    wrap.innerHTML = '<div class="admin-note">' + (adminDateFilter ? 'Nenhum agendamento nessa data.' : 'Nenhum agendamento a partir de hoje.') + '</div>';
+    return;
+  }
+  wrap.innerHTML = rows.map(b => {
+    const svcNames = (b.services || []).map(s => (s.qty > 1 ? s.qty + 'x ' : '') + s.name).join(', ');
+    return '<div class="booking-item">' +
+      '<div class="bi-top"><span class="bi-date">' + fmtBookingDate(b.appt_date) + ' · ' + toTime(b.start_min) + '</span>' +
+      '<span class="bi-pay">' + esc(b.payment || '') + '</span></div>' +
+      '<div class="bi-client">' + esc(b.client_name) + ' &middot; ' + esc(b.client_phone) + '</div>' +
+      '<div class="bi-services">' + esc(svcNames) + '</div>' +
+      '<div class="bi-actions"><button class="btn btn-outline btn-sm bi-cancel" onclick="cancelBooking(\'' + b.id + '\')">Cancelar</button></div>' +
+      '</div>';
+  }).join('');
 }
 async function cancelBooking(id){
   if (!confirm('Cancelar esse agendamento? O horário fica livre de novo pra qualquer cliente.')) return;
