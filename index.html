@@ -562,9 +562,9 @@ textarea.field-input{resize:vertical;min-height:64px;line-height:1.5}
 
       <div class="section-label">Seus dados</div>
       <label class="field-label">Nome completo</label>
-      <input class="field-input" id="clientName" type="text" placeholder="Seu nome" autocomplete="name">
+      <input class="field-input" id="clientName" type="text" placeholder="Seu nome" autocomplete="name" maxlength="80">
       <label class="field-label">WhatsApp</label>
-      <input class="field-input" id="clientPhone" type="tel" placeholder="(71) 99999-9999" autocomplete="tel">
+      <input class="field-input" id="clientPhone" type="tel" placeholder="(71) 99999-9999" autocomplete="tel" maxlength="20">
 
       <div class="section-label">Pagamento no local</div>
       <div class="pay-grid" id="payGrid">
@@ -1703,9 +1703,12 @@ function tocarAnimacaoAgendamento(nomeServico, workPromise, onConfirmar){
 async function submitBooking(){
   if (!cart.length){ showToast('Adicione ao menos um serviço.'); return; }
   if (!selDate || !selSlot){ showToast('Escolha a data e o horário.'); return; }
-  const name = document.getElementById('clientName').value.trim();
-  const phone = document.getElementById('clientPhone').value.trim();
+  const name = document.getElementById('clientName').value.trim().slice(0, 80);
+  const phone = document.getElementById('clientPhone').value.trim().slice(0, 20);
   if (!name || !phone){ showToast('Preencha seu nome e WhatsApp.'); return; }
+  if (name.length < 2){ showToast('Digite seu nome completo.'); return; }
+  const phoneDigits = phone.replace(/\D/g, '');
+  if (phoneDigits.length < 10 || phoneDigits.length > 13){ showToast('Digite um WhatsApp válido, com DDD.'); return; }
 
   const t = cartTotals();
   const startM = toMin(selSlot);
@@ -1773,7 +1776,7 @@ async function submitBooking(){
       localStorage.setItem('gomesBookedSlots', JSON.stringify(bk));
     } catch(e){}
 
-    window.open(url, '_blank');
+    window.open(url, '_blank', 'noopener,noreferrer');
     showToast('Abrindo WhatsApp para confirmar...');
   };
 
@@ -1799,7 +1802,7 @@ async function submitBooking(){
    MAPA / TOAST
    ============================================================ */
 function openMaps(){
-  window.open('https://www.google.com/maps/search/?api=1&query=' + BRAND.mapsCoords, '_blank');
+  window.open('https://www.google.com/maps/search/?api=1&query=' + BRAND.mapsCoords, '_blank', 'noopener,noreferrer');
 }
 let toastTimer = null;
 function showToast(msg){
