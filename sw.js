@@ -1,4 +1,4 @@
-const CACHE = 'gomes-barbearia-v1';
+const CACHE = 'gomes-barbearia-v2'; // bump: v1 cacheava por engano as respostas da API (Supabase), deixando configurações/horários desatualizados
 const SHELL = [
   './',
   './index.html',
@@ -25,6 +25,8 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+  const url = new URL(event.request.url);
+  if (url.origin !== self.location.origin) return; // nunca cacheia chamadas de API (Supabase) — sempre busca fresco na rede
   event.respondWith(
     caches.match(event.request).then((cached) => {
       const fetchPromise = fetch(event.request)

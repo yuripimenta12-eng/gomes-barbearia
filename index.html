@@ -392,6 +392,18 @@ textarea.field-input{resize:vertical;min-height:64px;line-height:1.5}
 .closed-date-item span{color:var(--cream)}
 .closed-date-item a{color:var(--danger);cursor:pointer;font-size:11px;text-decoration:underline}
 
+.admin-subtabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
+.admin-subtab{padding:10px 4px;text-align:center;border:1.5px solid var(--border);border-radius:6px;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;font-weight:700;cursor:pointer;color:var(--muted);background:var(--black)}
+.admin-subtab.sel{border-color:var(--gold);color:var(--gold);background:rgba(225,188,134,.08)}
+.booking-item{border:1px solid var(--border);border-radius:6px;padding:11px 13px;margin-bottom:10px}
+.booking-item .bi-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.booking-item .bi-date{color:var(--gold);font-size:12px;font-weight:700;letter-spacing:.4px}
+.booking-item .bi-pay{color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.6px}
+.booking-item .bi-client{color:var(--cream);font-size:12.5px;font-weight:600;margin-bottom:3px}
+.booking-item .bi-services{color:var(--muted);font-size:11px;line-height:1.5}
+.booking-item .bi-actions{margin-top:9px}
+.booking-item .bi-cancel{color:var(--danger);border-color:var(--danger)}
+
 @media (min-width:600px){
   .h-name{font-size:46px}
 }
@@ -610,29 +622,40 @@ textarea.field-input{resize:vertical;min-height:64px;line-height:1.5}
       </div>
 
       <div id="adminSettings" style="display:none">
-        <div class="admin-note">Visível só pra você (fica salvo neste navegador). Aqui você ajusta o horário de almoço, força aberto/fechado e bloqueia datas específicas.</div>
+        <div class="admin-note">Essas configurações valem pra todo mundo que acessa o site — não só pra você.</div>
 
-        <div class="section-label" style="margin-top:0">Horário de almoço (1h)</div>
-        <label class="field-label">Início da pausa</label>
-        <input class="field-input" id="admLunchStart" type="time" value="12:30">
-
-        <div class="section-label">Status da loja</div>
-        <div class="admin-status-grid" id="admStatusGrid">
-          <div class="pay-opt sel" data-s="auto">Automático</div>
-          <div class="pay-opt" data-s="open">Forçar Aberto</div>
-          <div class="pay-opt" data-s="closed">Forçar Fechado</div>
+        <div class="admin-subtabs" id="adminSubtabs">
+          <div class="admin-subtab sel" data-tab="config">Configurações</div>
+          <div class="admin-subtab" data-tab="bookings">Agendamentos</div>
         </div>
 
-        <div class="section-label">Bloquear uma data</div>
-        <div style="display:flex;gap:8px">
-          <input class="field-input" id="admBlockDate" type="date">
-          <button class="btn btn-outline btn-sm" onclick="addClosedDate()">Bloquear</button>
-        </div>
-        <div id="closedDatesList"></div>
+        <div id="adminPanelConfig">
+          <div class="section-label" style="margin-top:0">Horário de almoço (1h)</div>
+          <label class="field-label">Início da pausa</label>
+          <input class="field-input" id="admLunchStart" type="time" value="12:30">
 
-        <div class="submit-wrap">
-          <button class="btn btn-gold btn-block" onclick="saveAdmin()">Salvar Configurações</button>
-          <button class="btn btn-outline btn-block" style="margin-top:8px" onclick="adminLogout()">Sair</button>
+          <div class="section-label">Status da loja</div>
+          <div class="admin-status-grid" id="admStatusGrid">
+            <div class="pay-opt sel" data-s="auto">Automático</div>
+            <div class="pay-opt" data-s="open">Forçar Aberto</div>
+            <div class="pay-opt" data-s="closed">Forçar Fechado</div>
+          </div>
+
+          <div class="section-label">Bloquear uma data</div>
+          <div style="display:flex;gap:8px">
+            <input class="field-input" id="admBlockDate" type="date">
+            <button class="btn btn-outline btn-sm" onclick="addClosedDate()">Bloquear</button>
+          </div>
+          <div id="closedDatesList"></div>
+
+          <div class="submit-wrap">
+            <button class="btn btn-gold btn-block" id="admSaveBtn" onclick="saveAdmin()">Salvar Configurações</button>
+            <button class="btn btn-outline btn-block" style="margin-top:8px" onclick="adminLogout()">Sair</button>
+          </div>
+        </div>
+
+        <div id="adminPanelBookings" style="display:none">
+          <div id="adminBookingsList"></div>
         </div>
       </div>
 
@@ -834,14 +857,49 @@ function fmtDuration(min){
 function esc(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 
 /* ============================================================
-   ADMIN CONFIG (localStorage)
+   ADMIN CONFIG (Supabase — vale pra todo mundo que acessa o site;
+   localStorage aqui é só cache pra funcionar offline/1ª pintura)
    ============================================================ */
+let remoteSettingsCache = null;
 function getAdminConfig(){
   const def = { lunchStart:'12:30', lunchDur:60, forceStatus:'auto', closedDates:[] };
-  try { return Object.assign(def, JSON.parse(localStorage.getItem('gomesAdmin') || '{}')); }
-  catch(e){ return def; }
+  if (remoteSettingsCache) return remoteSettingsCache;
+  try {
+    const cached = JSON.parse(localStorage.getItem('gomesAdminRemoteCache') || 'null');
+    if (cached) return Object.assign(def, cached);
+  } catch(e){}
+  return def;
 }
-function setAdminConfig(cfg){ localStorage.setItem('gomesAdmin', JSON.stringify(cfg)); }
+async function loadStoreSettings(){
+  try {
+    const res = await fetch(SUPABASE_URL + '/rest/v1/store_settings?select=lunch_start,force_status,closed_dates&limit=1', {
+      headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY }
+    });
+    if (!res.ok) throw new Error('http ' + res.status);
+    const rows = await res.json();
+    if (!rows.length) throw new Error('empty');
+    remoteSettingsCache = { lunchStart: rows[0].lunch_start, lunchDur: 60, forceStatus: rows[0].force_status, closedDates: rows[0].closed_dates || [] };
+    localStorage.setItem('gomesAdminRemoteCache', JSON.stringify(remoteSettingsCache));
+  } catch (e){
+    // sem conexão: segue com o cache local (ou os padrões), sem travar a página
+  }
+  updateStatus();
+  renderDates();
+  if (selDate) renderSlots();
+}
+async function saveStoreSettingsRemote(cfg){
+  const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/update_store_settings', {
+    method: 'POST',
+    headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ p_pin_hash: adminPinHash, p_lunch_start: cfg.lunchStart, p_force_status: cfg.forceStatus, p_closed_dates: cfg.closedDates })
+  });
+  if (!res.ok) throw new Error('http ' + res.status);
+  remoteSettingsCache = cfg;
+  localStorage.setItem('gomesAdminRemoteCache', JSON.stringify(cfg));
+  updateStatus();
+  renderDates();
+  if (selDate) renderSlots();
+}
 
 /* ============================================================
    STATUS ABERTO/FECHADO
@@ -1820,18 +1878,26 @@ async function sha256Hex(text){
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
-function isAdminAuthed(){ return localStorage.getItem('gomesAdminAuthed') === '1'; }
+let adminPinHash = null; // só em memória — some ao recarregar a página, de propósito
+function isAdminAuthed(){ return !!adminPinHash; }
 function showAdminGate(){
   document.getElementById('adminGate').style.display = 'block';
   document.getElementById('adminSettings').style.display = 'none';
   document.getElementById('admPassInput').value = '';
   document.getElementById('admPassMsg').textContent = '';
 }
+function showAdminSubtab(tab){
+  document.querySelectorAll('#adminSubtabs .admin-subtab').forEach(t => t.classList.toggle('sel', t.dataset.tab === tab));
+  document.getElementById('adminPanelConfig').style.display = tab === 'config' ? 'block' : 'none';
+  document.getElementById('adminPanelBookings').style.display = tab === 'bookings' ? 'block' : 'none';
+  if (tab === 'bookings') loadAdminBookings();
+}
 function showAdminSettings(){
   const cfg = getAdminConfig();
   document.getElementById('admLunchStart').value = cfg.lunchStart;
   document.querySelectorAll('#admStatusGrid .pay-opt').forEach(o => o.classList.toggle('sel', o.dataset.s === cfg.forceStatus));
   renderClosedDates(cfg);
+  showAdminSubtab('config');
   document.getElementById('adminGate').style.display = 'none';
   document.getElementById('adminSettings').style.display = 'block';
 }
@@ -1841,15 +1907,66 @@ async function checkAdminPassword(){
   if (!val){ msg.textContent = 'Digite o PIN.'; return; }
   const hash = await sha256Hex(val);
   if (hash === ADMIN_PASS_HASH){
-    localStorage.setItem('gomesAdminAuthed', '1');
+    adminPinHash = hash;
     showAdminSettings();
   } else {
     msg.textContent = 'PIN incorreto.';
   }
 }
 function adminLogout(){
-  localStorage.removeItem('gomesAdminAuthed');
+  adminPinHash = null;
   showAdminGate();
+}
+document.getElementById('adminSubtabs').addEventListener('click', (e) => {
+  const t = e.target.closest('.admin-subtab');
+  if (!t) return;
+  showAdminSubtab(t.dataset.tab);
+});
+function fmtBookingDate(ds){
+  const [y,m,d] = ds.split('-').map(Number);
+  const dt = new Date(y, m-1, d);
+  return WDAYS[dt.getDay()] + ' ' + String(d).padStart(2,'0') + '/' + String(m).padStart(2,'0');
+}
+async function loadAdminBookings(){
+  const wrap = document.getElementById('adminBookingsList');
+  wrap.innerHTML = '<div class="admin-note">Carregando agendamentos...</div>';
+  try {
+    const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/admin_list_bookings', {
+      method: 'POST',
+      headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p_pin_hash: adminPinHash })
+    });
+    if (!res.ok) throw new Error('http ' + res.status);
+    const rows = await res.json();
+    if (!rows.length){ wrap.innerHTML = '<div class="admin-note">Nenhum agendamento a partir de hoje.</div>'; return; }
+    wrap.innerHTML = rows.map(b => {
+      const svcNames = (b.services || []).map(s => (s.qty > 1 ? s.qty + 'x ' : '') + s.name).join(', ');
+      return '<div class="booking-item">' +
+        '<div class="bi-top"><span class="bi-date">' + fmtBookingDate(b.appt_date) + ' · ' + toTime(b.start_min) + '</span>' +
+        '<span class="bi-pay">' + esc(b.payment || '') + '</span></div>' +
+        '<div class="bi-client">' + esc(b.client_name) + ' &middot; ' + esc(b.client_phone) + '</div>' +
+        '<div class="bi-services">' + esc(svcNames) + '</div>' +
+        '<div class="bi-actions"><button class="btn btn-outline btn-sm bi-cancel" onclick="cancelBooking(\'' + b.id + '\')">Cancelar</button></div>' +
+        '</div>';
+    }).join('');
+  } catch (e){
+    wrap.innerHTML = '<div class="admin-note" style="color:var(--danger)">Não deu pra carregar os agendamentos. Verifique a conexão.</div>';
+  }
+}
+async function cancelBooking(id){
+  if (!confirm('Cancelar esse agendamento? O horário fica livre de novo pra qualquer cliente.')) return;
+  try {
+    const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/admin_cancel_booking', {
+      method: 'POST',
+      headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p_pin_hash: adminPinHash, p_id: id })
+    });
+    if (!res.ok) throw new Error('http ' + res.status);
+    showToast('Agendamento cancelado.');
+    loadAdminBookings();
+  } catch (e){
+    showToast('Não deu pra cancelar. Tente de novo.');
+  }
 }
 function openAdmin(){
   document.getElementById('adminOverlay').classList.add('show');
@@ -1871,33 +1988,49 @@ function renderClosedDates(cfg){
     return '<div class="closed-date-item"><span>' + d + '/' + m + '/' + y + '</span><a onclick="removeClosedDate(\'' + ds + '\')">remover</a></div>';
   }).join('');
 }
-function addClosedDate(){
+async function addClosedDate(){
   const val = document.getElementById('admBlockDate').value;
   if (!val) return;
   const cfg = getAdminConfig();
-  if (!cfg.closedDates.includes(val)) cfg.closedDates.push(val);
-  setAdminConfig(cfg);
-  renderClosedDates(cfg);
-  document.getElementById('admBlockDate').value = '';
+  if (cfg.closedDates.includes(val)) return;
+  const next = Object.assign({}, cfg, { closedDates: [...cfg.closedDates, val] });
+  try {
+    await saveStoreSettingsRemote(next);
+    renderClosedDates(next);
+    document.getElementById('admBlockDate').value = '';
+    showToast('Data bloqueada — já vale pra todo mundo.');
+  } catch (e){
+    showToast('Não deu pra salvar. Tente de novo.');
+  }
 }
-function removeClosedDate(ds){
+async function removeClosedDate(ds){
   const cfg = getAdminConfig();
-  cfg.closedDates = cfg.closedDates.filter(d => d !== ds);
-  setAdminConfig(cfg);
-  renderClosedDates(cfg);
+  const next = Object.assign({}, cfg, { closedDates: cfg.closedDates.filter(d => d !== ds) });
+  try {
+    await saveStoreSettingsRemote(next);
+    renderClosedDates(next);
+    showToast('Data desbloqueada.');
+  } catch (e){
+    showToast('Não deu pra salvar. Tente de novo.');
+  }
 }
-function saveAdmin(){
+async function saveAdmin(){
   const cfg = getAdminConfig();
-  cfg.lunchStart = document.getElementById('admLunchStart').value || '12:30';
-  cfg.lunchDur = 60;
+  const next = Object.assign({}, cfg, { lunchDur: 60 });
+  next.lunchStart = document.getElementById('admLunchStart').value || '12:30';
   const statusSel = document.querySelector('#admStatusGrid .pay-opt.sel');
-  cfg.forceStatus = statusSel ? statusSel.dataset.s : 'auto';
-  setAdminConfig(cfg);
-  updateStatus();
-  renderDates();
-  if (selDate) renderSlots();
-  closeAdmin();
-  showToast('Configurações salvas.');
+  next.forceStatus = statusSel ? statusSel.dataset.s : 'auto';
+  const btn = document.getElementById('admSaveBtn');
+  if (btn) btn.disabled = true;
+  try {
+    await saveStoreSettingsRemote(next);
+    closeAdmin();
+    showToast('Salvo! Já vale pra todo mundo que acessa o site.');
+  } catch (e){
+    showToast('Não deu pra salvar — verifique a conexão e tente de novo.');
+  } finally {
+    if (btn) btn.disabled = false;
+  }
 }
 
 /* ============================================================
@@ -1946,6 +2079,7 @@ showRepeatBanner();
 updateStatus();
 setInterval(updateStatus, 30000);
 handleDeepLink();
+loadStoreSettings();
 
 if ('serviceWorker' in navigator){
   window.addEventListener('load', () => {
